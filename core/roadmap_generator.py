@@ -24,11 +24,11 @@ def save_roadmap(roadmap: map_elements.Roadmap, filename: str):
     """
     Save the roadmap to a JSON file.
     """
-    print("\n\n\n\n\n\n\n")
+
+    save = str(roadmap)
 
     with open(filename, "w", encoding="utf-8") as f:
-        # json.dump(roadmap.to_dict(), f, default=str, indent=4)
-        f.writelines(roadmap.to_dict())
+        json.dump(roadmap, f, default=str, indent=4)
 
 @tool
 def create_resource(title: str, url: str, description: str = "") -> map_elements.Resource:
@@ -38,25 +38,25 @@ def create_resource(title: str, url: str, description: str = "") -> map_elements
     return map_elements.Resource(title=title, url=url, description=description)
 
 @tool
-def create_keyframe(title: str, description: str, due_date: str, completed: bool = False) -> map_elements.Keyframe:
+def create_keyframe(title: str, description: str, due_date: str, completed: bool = False, resources: list[map_elements.Resource] = []) -> map_elements.Keyframe:
     """
-    Create a new keyframe with the given title, description, due date, and completion status.
+    Create a new keyframe with the given title, description, due date, completion status, and a list of resources.
     """
-    return map_elements.Keyframe(title=title, description=description, due_date=datetime.datetime.fromisoformat(due_date), completed=completed)
+    return map_elements.Keyframe(title=title, description=description, due_date=datetime.datetime.fromisoformat(due_date), completed=completed, resources=resources)
 
 @tool
-def create_stage(name: str, level: map_elements.LearningLevel) -> map_elements.Stage:
+def create_stage(name: str, level: map_elements.LearningLevel, keyframes: list[map_elements.Keyframe]) -> map_elements.Stage:
     """
-    Create a new stage with the given name and learning level.
+    Create a new stage with the given name, learning level and a list of keyframes.
     """
-    return map_elements.Stage(name=name, level=level)
+    return map_elements.Stage(name=name, level=level, keyframes=keyframes)
 
 @tool
-def create_roadmap(topic: str, user_id: str = "default_user", level: map_elements.LearningLevel = 'full') -> map_elements.Roadmap:
+def create_roadmap(topic: str, level: map_elements.LearningLevel = 'full', stages: list[map_elements.Stage] = []) -> map_elements.Roadmap:
     """
-    Create a new roadmap with the given topic, user ID, and optional learning level.
+    Create a new roadmap with the given topic, user ID, optional learning level, and a list of stages to be passed.
     """
-    generated_roadmap = map_elements.Roadmap(topic=topic, created_at=datetime.datetime.now(), user_id=user_id, level=level)
+    generated_roadmap = map_elements.Roadmap(topic=topic, created_at=datetime.datetime.now(), level=level, stages=stages)
 
     save_roadmap(generated_roadmap, f"{topic}.txt")
 
@@ -79,8 +79,9 @@ def llm_node(state):
     A node that uses the LLM to generate a response based on the current state.
     """
     system_message = SystemMessage(content="""You are a professional roadmap creator. Use the topic give and the user level to build an optimal roadmap. 
-                                   If the user level is not given build a full roadmap from beginner to advanced level. 
-                                   The generated data should be in json format. The generated output should be a roadmap object as defined in roadmap generator.
+                                   If the user level is not given build a full roadmap from beginner to advanced level. The generated data should be in json format 
+                                   and should be very detailed with optinal additional concepts related to the topic. The generated output should be a roadmap object 
+                                   as defined in roadmap generator. Ensure that proper JSON format is followed as it will be passed to json.loads().
                                    The following is the layout for each leve of the roadmap:
                                    
                                    # Resource:
@@ -138,13 +139,13 @@ builder.add_conditional_edges('llm', router, {'tools': 'tools', 'end': END})
 
 graph = builder.compile()
 
-def generate_roadmap(topic: str, user_id: str = "default_user", level: Optional[map_elements.LearningLevel] = None):
+def generate_roadmap(topic: str, level: Optional[map_elements.LearningLevel] = None):
     """
     Generate a roadmap based on the given topic, user ID, and optional learning level.
     """
     initial_state = {
         'messages': [
-            HumanMessage(content=f"Create a roadmap for the topic: {topic} with user ID: {user_id} and level: {level if level else 'not specified'}.")
+            HumanMessage(content=f"Create a roadmap for the topic: {topic} with level: {level if level else 'from begginer to advanced'}.")
         ]
     }
     
@@ -168,21 +169,33 @@ def generate_roadmap(topic: str, user_id: str = "default_user", level: Optional[
         else:
             return "No valid response from the agent."
 
-def convert_to_roadmap(input_string: str = ""):
+def convert_to_json_str(input_string: str = ""):
     thing = json.loads(input_string)
-    print("\n"*10)
-    print(thing)
+    print("Converter called")
     save_roadmap(thing, f"data\\RoadMaps\\{topic}.json")
-
+    print("File saved")
     return thing
 
+def create_new_roadmap(topic, level):
+    roadmap = str(generate_roadmap(topic, level))
+    roadmap = str(generate_roadmap(topic, level))
+    roadmap = roadmap[(roadmap.find("</think>") + len("</think>") + 2):]
+    roadmap = convert_to_json_str(roadmap)
+    roadmap = json.loads(roadmap)
+    roadmap = map_elements.Roadmap.from_json(roadmap)
+    return roadmap
 
 if __name__ == "__main__":
-    topic = "Artificial Intelligence"
+    topic = "Roman Empire History"
     level = 'full'
 
-    roadmap = generate_roadmap(topic, level)
-    roadmap = convert_to_roadmap(roadmap)
+    roadmap = str(generate_roadmap(topic, level))
+    roadmap = roadmap[(roadmap.find("</think>") + len("</think>") + 2):]
+
+    with open("things.txt", 'w') as f:
+        f.writelines(roadmap)
+    
+    roadmap = convert_to_json_str(roadmap)
     
     print("Exiting")
     

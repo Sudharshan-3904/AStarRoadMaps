@@ -47,11 +47,10 @@ class Stage:
 
 @dataclass
 class Roadmap:
-    def __init__(self, topic: str = "", created_at: datetime = datetime.now(), stages: List[Stage] = [], user_id: str = "default_user", level: LearningLevel= "beginner"):
+    def __init__(self, topic: str = "", created_at: datetime = datetime.now(), stages: List[Stage] = [], level: LearningLevel= "beginner"):
         self.topic = topic
         self.created_at = created_at
         self.stages = stages
-        self.user_id = user_id
         self.level = level
 
     def add_stage(self, stage: Stage):
@@ -96,6 +95,5 @@ class Roadmap:
             topic=data["topic"],
             created_at=datetime.fromisoformat(data["created_at"]),
             stages=stages,
-            user_id=data.get("user_id", "default_user"),
             level=data.get("level")
         )

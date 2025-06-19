@@ -1,0 +1,122 @@
+{
+  "Roadmap": {
+    "Topic": "Roman Empire History",
+    "stages": [
+      {
+        "name": "Beginner Level: Foundations of Roman Empire",
+        "level": "beginner",
+        "keyframes": [
+          {
+            "title": "Introduction to Ancient Rome",
+            "description": "Understand the origins of Rome, the Etruscans, and early Roman society.",
+            "resources": [
+              {
+                "Title": "The Story of the Roman Empire",
+                "Description": "A comprehensive overview of Rome's history from its founding to the fall of the Western Empire.",
+                "URL": "https://www.amazon.com/Story-Roman-Empire-Suzannah-Lipscomb/dp/1476706034"
+              },
+              {
+                "Title": "Rome: An Empire's Story (Documentary Series)",
+                "Description": "A visual journey through the key events and figures of Roman history.",
+                "URL": "https://www.history.com/shows/rome-an-empires-story"
+              }
+            ]
+          },
+          {
+            "title": "The Roman Republic",
+            "description": "Explore the political system, key figures like Cicero, and the transition to empire.",
+            "resources": [
+              {
+                "Title": "The Roman Republic by Mary Beard",
+                "Description": "A detailed analysis of Rome's republican government and its evolution.",
+                "URL": "https://www.amazon.com/Roman-Republic-Mary-Beard/dp/0674976123"
+              },
+              {
+                "Title": "BBC History: Roman Republic",
+                "Description": "Educational videos on the structure and decline of the Roman Republic.",
+                "URL": "https://www.bbc.co.uk/history/roman-republic"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Intermediate Level: Rise and Expansion",
+        "level": "intermediate",
+        "keyframes": [
+          {
+            "title": "The Julio-Claudian Emperors",
+            "description": "Study the reigns of Augustus, Tiberius, Caligula, and the political instability of the early empire.",
+            "resources": [
+              {
+                "Title": "Augustus: The Life of Rome's First Emperor",
+                "Description": "A biography of Augustus and his impact on Roman society.",
+                "URL": "https://www.amazon.com/Augustus-Life-Rome%E2%80%99s-First-Emperor/dp/0674976123"
+              },
+              {
+                "Title": "The Julio-Claudian Dynasty (Documentary)",
+                "Description": "A deep dive into the emperors and their legacies.",
+                "URL": "https://www.history.com/topics/ancient-history/julio-claudian-dynasty"
+              }
+            ]
+          },
+          {
+            "title": "The Pax Romana and Military Expansion",
+            "description": "Examine the peace of Rome, military campaigns, and the empire's territorial peak.",
+            "resources": [
+              {
+                "Title": "The Roman Army: A Social and Military History",
+                "Description": "An analysis of the Roman military structure and its role in expansion.",
+                "URL": "https://www.amazon.com/Roman-Army-Social-Military-History/dp/0674014514"
+              },
+              {
+                "Title": "Pax Romana (Documentary Series)",
+                "Description": "Explores the stability and achievements of Rome's golden age.",
+                "URL": "https://www.history.com/topics/ancient-history/pax-romana"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Advanced Level: Decline and Legacy",
+        "level": "advanced",
+        "keyframes": [
+          {
+            "title": "The Fall of the Western Roman Empire",
+            "description": "Analyze causes of decline, including invasions, economic collapse, and political fragmentation.",
+            "resources": [
+              {
+                "Title": "The Fall of the Roman Empire by Edward Gibbon",
+                "Description": "A classic account of Rome's decline and fall.",
+                "URL": "https://www.amazon.com/Fall-Roman-Empire-Edward-Gibbon/dp/0140444268"
+              },
+              {
+                "Title": "Collapse of the Roman Empire (Documentary)",
+                "Description": "Examines the complex factors leading to Rome's demise.",
+                "URL": "https://www.history.com/topics/ancient-history/collapse-of-the-roman-empire"
+              }
+            ]
+          },
+          {
+            "title": "Roman Legacy and Modern Influence",
+            "description": "Study the enduring impact of Rome on law, language, architecture, and governance.",
+            "resources": [
+              {
+                "Title": "The Legacy of Rome by Michael Grant",
+                "Description": "Explores how Roman culture and institutions shaped the modern world.",
+                "URL": "https://www.amazon.com/Legacy-Rome-Michael-Grant/dp/0674538575"
+              },
+              {
+                "Title": "Roman Law and Its Influence",
+                "Description": "A scholarly analysis of Roman legal principles and their modern applications.",
+                "URL": "https://www.oxfordacademy.org/roman-law"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "level": "full"
+  }
+}
