@@ -4,21 +4,23 @@ from datetime import datetime
 import json
 
 
-LearningLevel = Literal["beginner", "intermediate", "advanced", "refresher"]
+LearningLevel = Literal["beginner", "intermediate", "advanced", "refresher", "full"]
 
 @dataclass
 class Resource:
-    title: str
-    url: str
-    description: str = ""
+    def __init__(self, title: str, url: str, description: str = ""):
+        self.title = title
+        self.url = url
+        self.description = description
 
 @dataclass
 class Keyframe:
-    title: str
-    description: str
-    due_date: datetime
-    completed: bool = False
-    resources: List[Resource] = field(default_factory=list)
+    def __init__(self, title: str = "", description: str = "", due_date: datetime = datetime.now(), completed: bool = False, resources: List[Resource] = []):
+        self.title = title
+        self.description = description
+        self.due_date = due_date
+        self.completed = completed
+        self.resources = field(default_factory=list)
 
     def mark_complete(self):
         self.completed = True
@@ -28,9 +30,10 @@ class Keyframe:
 
 @dataclass
 class Stage:
-    name: str
-    level: LearningLevel
-    keyframes: List[Keyframe] = field(default_factory=list)
+    def __init__(self, name: str = "", level: LearningLevel = "beginner", keyframes: List[Keyframe] = []):
+        self.name = name
+        self.level = level
+        self.keyframes = keyframes
 
     def add_keyframe(self, keyframe: Keyframe):
         self.keyframes.append(keyframe)
@@ -44,11 +47,12 @@ class Stage:
 
 @dataclass
 class Roadmap:
-    topic: str
-    created_at: datetime
-    stages: List[Stage] = field(default_factory=list)
-    user_id: str = "default_user"
-    level: Optional[LearningLevel] = None
+    def __init__(self, topic: str = "", created_at: datetime = datetime.now(), stages: List[Stage] = [], user_id: str = "default_user", level: LearningLevel= "beginner"):
+        self.topic = topic
+        self.created_at = created_at
+        self.stages = stages
+        self.user_id = user_id
+        self.level = level
 
     def add_stage(self, stage: Stage):
         self.stages.append(stage)
