@@ -8,24 +8,21 @@
 auto_roadmap/
 │
 ├── core/
+│   ├── roadmap_elements.py         # Defiens all the roadmap elements
 │   ├── roadmap_generator.py        # Main roadmap logic
 │   ├── web_search.py               # Fetch relevant web articles
 │   ├── roadmap_builder.py          # Build custom trackable roadmap
 │   └── question_answering.py       # Use LLM to answer questions
 │
 ├── ui/
-│   ├── dashboard.py                # CLI or web dashboard (Streamlit/Gradio)
-│   └── visualizer.py               # Plots, graphs (matplotlib/plotly)
+│   ├── dashboard.py                # Steramlit dashboard
+│   └── visualizer.py               # Plots, graphs (plotly)
 │
 ├── models/
 │   └── local_model_interface.py    # LangChain+MCP for local LLM queries
 │
 ├── data/
 │   └── user_progress.json          # Save user data and keyframes
-│
-├── docker/
-│   ├── Dockerfile                  # For full project container
-│   └── requirements.txt
 │
 ├── main.py                         # Entry point
 └── README.md
@@ -78,66 +75,10 @@ auto_roadmap/
 | Purpose          | Tool/Library          |
 | ---------------- | --------------------- |
 | LLM Framework    | LangChain + MCP       |
-| Local Models     | LM Studio / Ollama    |
+| Local Models     | LM Studio             |
 | Web Scraping     | newspaper3k / SerpAPI |
-| Visualization    | Plotly / Matplotlib   |
-| UI (Optional)    | Gradio / Streamlit    |
-| Containerization | Docker                |
-| State Management | JSON / SQLite         |
-
----
-
-## 🐳 Docker Setup (Minimal)
-
-### `Dockerfile`
-
-```Dockerfile
-FROM python:3.11-slim
-
-WORKDIR /app
-
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-COPY . .
-
-CMD ["python", "main.py"]
-```
-
-### `requirements.txt`
-
-```txt
-langchain
-mcp
-newspaper3k
-plotly
-streamlit
-matplotlib
-duckduckgo-search
-```
-
----
-
-## 🔄 Development Milestones
-
-### ✅ Phase 1: Basic Python Implementation
-
-- [ ] Input topic and generate roadmap skeleton
-- [ ] Integrate web search and fetch relevant articles
-- [ ] Allow roadmap customization + save JSON
-- [ ] Display progress graphs
-- [ ] Run local model Q\&A via LangChain
-
-### 🐳 Phase 2: Dockerize the Project
-
-- [ ] Create Dockerfile, volume for user data
-- [ ] Optimize container for offline LLM
-- [ ] Test on LM Studio and Ollama instances
-
-### 📊 Phase 3: Advanced Features
-
-- [ ] Add Gantt timeline with `plotly`
-- [ ] UI dashboard using Streamlit
-- [ ] Sync progress across sessions
+| Visualization    | Plotly                |
+| UI               | Streamlit             |
+| State Management | JSON                  |
 
 ---
