@@ -10,8 +10,6 @@ auto_roadmap/
 ├── core/
 │   ├── roadmap_elements.py         # Defiens all the roadmap elements
 │   ├── roadmap_generator.py        # Main roadmap logic
-│   ├── web_search.py               # Fetch relevant web articles
-│   ├── roadmap_builder.py          # Build custom trackable roadmap
 │   └── question_answering.py       # Use LLM to answer questions
 │
 ├── ui/
