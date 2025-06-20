@@ -4,7 +4,7 @@ import core.roadmap_generator as rmg
 class CLI:
     def run(self):
         while True:
-            print("Welcom eto roadmap creator !!!. This is an interactive tool to create roadmaps.")
+            print("Welcom eto roadmap creator !!! This is an interactive tool to create roadmaps.")
             
             if input("To quit, enter quit: "):
                 break

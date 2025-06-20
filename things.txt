@@ -3,114 +3,130 @@
     "Topic": "Roman Empire History",
     "stages": [
       {
-        "name": "Beginner Level: Foundations of Roman Empire",
+        "name": "Beginner: Foundations of the Roman Empire",
         "level": "beginner",
         "keyframes": [
           {
-            "title": "Introduction to Ancient Rome",
-            "description": "Understand the origins of Rome, the Etruscans, and early Roman society.",
+            "title": "Origins of Rome and the Roman Republic",
+            "description": "Explore the mythological and historical foundations of Rome, the Etruscan influence, and the transition from monarchy to the Roman Republic. Key concepts include the Senate, plebeians, and the Punic Wars.",
             "resources": [
               {
-                "Title": "The Story of the Roman Empire",
-                "Description": "A comprehensive overview of Rome's history from its founding to the fall of the Western Empire.",
-                "URL": "https://www.amazon.com/Story-Roman-Empire-Suzannah-Lipscomb/dp/1476706034"
+                "Title": "The Roman Republic: A New History",
+                "Description": "A comprehensive overview of the Republic's political structure and key events.",
+                "URL": "https://www.amazon.com/Roman-Republic-New-History-Christopher-Webster/dp/0199219557"
               },
               {
-                "Title": "Rome: An Empire's Story (Documentary Series)",
-                "Description": "A visual journey through the key events and figures of Roman history.",
-                "URL": "https://www.history.com/shows/rome-an-empires-story"
+                "Title": "History Channel - The Rise of Rome",
+                "Description": "Documentary series covering Rome's early history and the Republic's formation.",
+                "URL": "https://www.history.com/series/1572-the-rise-of-rome"
               }
             ]
           },
           {
-            "title": "The Roman Republic",
-            "description": "Explore the political system, key figures like Cicero, and the transition to empire.",
+            "title": "The Rise of the Roman Empire",
+            "description": "Study the transition from Republic to Empire under Julius Caesar, Augustus, and the establishment of the Principate. Focus on military expansion, political reforms, and the Pax Romana.",
             "resources": [
               {
-                "Title": "The Roman Republic by Mary Beard",
-                "Description": "A detailed analysis of Rome's republican government and its evolution.",
-                "URL": "https://www.amazon.com/Roman-Republic-Mary-Beard/dp/0674976123"
+                "Title": "The Empire of Augustus",
+                "Description": "Detailed analysis of Augustus' reign and the consolidation of imperial power.",
+                "URL": "https://www.amazon.com/Emperor-Augustus-Charles-Edwards/dp/0674012227"
               },
               {
-                "Title": "BBC History: Roman Republic",
-                "Description": "Educational videos on the structure and decline of the Roman Republic.",
-                "URL": "https://www.bbc.co.uk/history/roman-republic"
+                "Title": "BBC - The Roman Empire",
+                "Description": "Educational videos on the Empire's rise and early governance.",
+                "URL": "https://www.bbc.co.uk/history/roman"
               }
             ]
           }
         ]
       },
       {
-        "name": "Intermediate Level: Rise and Expansion",
+        "name": "Intermediate: The Golden Age and Decline",
         "level": "intermediate",
         "keyframes": [
           {
-            "title": "The Julio-Claudian Emperors",
-            "description": "Study the reigns of Augustus, Tiberius, Caligula, and the political instability of the early empire.",
+            "title": "The Pax Romana and Imperial Expansion",
+            "description": "Analyze the stability of the Empire during the 1st-2nd centuries CE, the spread of Roman law, and the role of key emperors like Trajan and Hadrian. Explore the integration of provinces and cultural diffusion.",
             "resources": [
               {
-                "Title": "Augustus: The Life of Rome's First Emperor",
-                "Description": "A biography of Augustus and his impact on Roman society.",
-                "URL": "https://www.amazon.com/Augustus-Life-Rome%E2%80%99s-First-Emperor/dp/0674976123"
+                "Title": "Pax Romana: A History of the Roman Peace",
+                "Description": "Examines the political, economic, and cultural achievements of the Pax Romana.",
+                "URL": "https://www.amazon.com/Pax-Romana-History-Roman-Peace/dp/0470672295"
               },
               {
-                "Title": "The Julio-Claudian Dynasty (Documentary)",
-                "Description": "A deep dive into the emperors and their legacies.",
-                "URL": "https://www.history.com/topics/ancient-history/julio-claudian-dynasty"
+                "Title": "Smithsonian - Roman Empire",
+                "Description": "Articles and visuals on the Empire's infrastructure and cultural impact.",
+                "URL": "https://www.smithsonianmag.com/history/roman-empire-180964316/"
               }
             ]
           },
           {
-            "title": "The Pax Romana and Military Expansion",
-            "description": "Examine the peace of Rome, military campaigns, and the empire's territorial peak.",
+            "title": "The Crisis of the Third Century and Decline",
+            "description": "Investigate the political fragmentation, economic turmoil, and military challenges during the 3rd century. Study the reforms of Diocletian, the split into East and West, and the role of the military in governance.",
             "resources": [
               {
-                "Title": "The Roman Army: A Social and Military History",
-                "Description": "An analysis of the Roman military structure and its role in expansion.",
-                "URL": "https://www.amazon.com/Roman-Army-Social-Military-History/dp/0674014514"
+                "Title": "The Crisis of the Third Century",
+                "Description": "A detailed breakdown of the Empire's near-collapse and recovery efforts.",
+                "URL": "https://www.britannica.com/event/Crisis-of-the-Third-Century"
               },
               {
-                "Title": "Pax Romana (Documentary Series)",
-                "Description": "Explores the stability and achievements of Rome's golden age.",
-                "URL": "https://www.history.com/topics/ancient-history/pax-romana"
+                "Title": "Documentary: Rome: Empire of the West",
+                "Description": "Explores the decline of the Western Roman Empire through historical analysis.",
+                "URL": "https://www.youtube.com/watch?v=3k7Y61x2b7I"
               }
             ]
           }
         ]
       },
       {
-        "name": "Advanced Level: Decline and Legacy",
+        "name": "Advanced: Legacy and Modern Interpretations",
         "level": "advanced",
         "keyframes": [
           {
             "title": "The Fall of the Western Roman Empire",
-            "description": "Analyze causes of decline, including invasions, economic collapse, and political fragmentation.",
+            "description": "Examine the final centuries of the Western Empire, including the Gothic Wars, the deposition of Romulus Augustulus, and the transition to the Byzantine Empire. Analyze historical debates on the 'fall' versus 'transformation.'",
             "resources": [
               {
-                "Title": "The Fall of the Roman Empire by Edward Gibbon",
-                "Description": "A classic account of Rome's decline and fall.",
-                "URL": "https://www.amazon.com/Fall-Roman-Empire-Edward-Gibbon/dp/0140444268"
+                "Title": "The Fall of the Roman Empire",
+                "Description": "Scholarly analysis of the collapse of the Western Roman Empire.",
+                "URL": "https://www.amazon.com/Fall-Roman-Empire-Charles-Davis/dp/0813317338"
               },
               {
-                "Title": "Collapse of the Roman Empire (Documentary)",
-                "Description": "Examines the complex factors leading to Rome's demise.",
-                "URL": "https://www.history.com/topics/ancient-history/collapse-of-the-roman-empire"
+                "Title": "PBS - The Fall of Rome",
+                "Description": "Documentary series on the fall of Rome and its legacy.",
+                "URL": "https://www.pbs.org/wnet/poverty-matters/the-fall-of-rome/"
               }
             ]
           },
           {
-            "title": "Roman Legacy and Modern Influence",
-            "description": "Study the enduring impact of Rome on law, language, architecture, and governance.",
+            "title": "Byzantine Empire and Roman Legacy",
+            "description": "Study the continuation of the Roman Empire in the East (Byzantium), its legal and religious institutions, and its influence on medieval Europe. Explore the fall of Constantinople and the Renaissance's revival of Roman thought.",
             "resources": [
               {
-                "Title": "The Legacy of Rome by Michael Grant",
-                "Description": "Explores how Roman culture and institutions shaped the modern world.",
-                "URL": "https://www.amazon.com/Legacy-Rome-Michael-Grant/dp/0674538575"
+                "Title": "The Byzantine Empire: A History",
+                "Description": "Comprehensive overview of the Eastern Roman Empire's history and legacy.",
+                "URL": "https://www.amazon.com/Byzantine-Empire-History-Thomas-Healy/dp/0813317346"
               },
               {
-                "Title": "Roman Law and Its Influence",
-                "Description": "A scholarly analysis of Roman legal principles and their modern applications.",
-                "URL": "https://www.oxfordacademy.org/roman-law"
+                "Title": "Documentary: Byzantium: The Empire That Never Fell",
+                "Description": "Explores the Byzantine Empire's cultural and political impact.",
+                "URL": "https://www.youtube.com/watch?v=6Qa1N0XW5dA"
+              }
+            ]
+          },
+          {
+            "title": "Modern Scholarship and Debates",
+            "description": "Engage with contemporary interpretations of Roman history, including the role of archaeology, digital reconstructions, and the Empire's influence on modern governance, law, and culture.",
+            "resources": [
+              {
+                "Title": "Roman History: A New History",
+                "Description": "A modern synthesis of Roman history with interdisciplinary perspectives.",
+                "URL": "https://www.amazon.com/Roman-History-Christopher-Webster/dp/0199219565"
+              },
+              {
+                "Title": "The Roman Empire in the Modern World",
+                "Description": "Examines the enduring impact of Roman institutions on contemporary society.",
+                "URL": "https://www.historic-uk.com/ancient-romans/roman-empire-modern-world/"
               }
             ]
           }

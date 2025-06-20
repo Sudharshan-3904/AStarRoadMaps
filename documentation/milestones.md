@@ -10,8 +10,8 @@
 | Core Logic             | CL4     | Add JSON `save/load` functionality to Roadmap class                             | Done   |
 | Core Logic             | CL5     | Build basic CLI or function interface for testing roadmap creation              | Done   |
 | Local LLM Integration  | LLM1    | Set up local LLM (LM Studio / Ollama) on your system                            | Done   |
-| Local LLM Integration  | LLM3    | Integrate LLM roadmap generation into `roadmap_generator.py` via `use_llm` flag | Done   |
-| Local LLM Integration  | LLM4    | Add fallback to rule-based structure if LLM fails                               | Done   |
+| Local LLM Integration  | LLM2    | Integrate LLM roadmap generation into `roadmap_generator.py` via `use_llm` flag | Done   |
+| Local LLM Integration  | LLM3    | Add fallback to rule-based structure if LLM fails                               | Done   |
 | User Progress Tracking | UP1     | Add `user_progress.json` to store keyframe completion state                     |        |
 | User Progress Tracking | UP2     | Enable progress update and status toggling (e.g., mark complete)                |        |
 | Visualization          | VS1     | Create `visualizer.py` with Matplotlib or Plotly Gantt chart                    |        |
@@ -36,7 +36,7 @@
 ## 🔄 Suggested Task Flow (Chronological Execution)
 
 1. ✅ **CL1 → CL5**: Core roadmap logic (rule-based).
-2. ✅ **LLM1 → LLM4**: LLM roadmap generation via LangChain.
+2. ✅ **LLM1 → LLM3**: LLM roadmap generation via LangChain.
 3. ✅ **UP1 → UP2**: Store user progress.
 4. ✅ **VS1 → VS3**: Add visualizations.
 5. ✅ **UI1 → UI3**: Optional interactive dashboard.

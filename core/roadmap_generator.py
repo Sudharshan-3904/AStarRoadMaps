@@ -11,7 +11,7 @@ from langchain_core.messages import HumanMessage, AIMessage, SystemMessage, Tool
 from langgraph.prebuilt import ToolNode
 from langgraph.graph import StateGraph, START, END
 
-import core.roadmap_elements as map_elements
+import roadmap_elements as map_elements
 import datetime
 
 load_dotenv()
@@ -20,15 +20,16 @@ LM_STUDIO_MODEL_NAME = os.getenv("LM_STUDIO_MODEL_NAME")
 OLLAMA_MODEL_NAME = os.getenv("OLLAMA_MODEL_NAME")
 MODEL_MODE = os.getenv("MODEL_MODE", "LM_STUDIO")
 
-def save_roadmap(roadmap: map_elements.Roadmap, filename: str):
+def save_roadmap(roadmap: map_elements.Roadmap = map_elements.Roadmap(), filename: str = "output.json"):
     """
     Save the roadmap to a JSON file.
     """
-
-    save = str(roadmap)
+    """save = str(roadmap)
 
     with open(filename, "w", encoding="utf-8") as f:
-        json.dump(roadmap, f, default=str, indent=4)
+        json.dump(roadmap, f, default=str, indent=4)"""
+    
+    roadmap.save_to_json(filename)
 
 @tool
 def create_resource(title: str, url: str, description: str = "") -> map_elements.Resource:
@@ -38,11 +39,11 @@ def create_resource(title: str, url: str, description: str = "") -> map_elements
     return map_elements.Resource(title=title, url=url, description=description)
 
 @tool
-def create_keyframe(title: str, description: str, due_date: str, completed: bool = False, resources: list[map_elements.Resource] = []) -> map_elements.Keyframe:
+def create_keyframe(title: str, description: str, completed: bool = False, resources: list[map_elements.Resource] = []) -> map_elements.Keyframe:
     """
-    Create a new keyframe with the given title, description, due date, completion status, and a list of resources.
+    Create a new keyframe with the given title, description, completion status, and a list of resources.
     """
-    return map_elements.Keyframe(title=title, description=description, due_date=datetime.datetime.fromisoformat(due_date), completed=completed, resources=resources)
+    return map_elements.Keyframe(title=title, description=description, completed=completed, resources=resources)
 
 @tool
 def create_stage(name: str, level: map_elements.LearningLevel, keyframes: list[map_elements.Keyframe]) -> map_elements.Stage:
@@ -69,7 +70,6 @@ class ChatState(TypedDict):
 
 llm = init_chat_model(LM_STUDIO_MODEL_NAME if MODEL_MODE=='lm-studio' else OLLAMA_MODEL_NAME, model_provider=MODEL_MODE)
 
-# TODO - Define all the tools and their functionality here
 tool_node = ToolNode([create_resource, create_keyframe, create_stage, create_roadmap])
 raw_llm = init_chat_model(LM_STUDIO_MODEL_NAME if MODEL_MODE=='lm-studio' else OLLAMA_MODEL_NAME, model_provider=MODEL_MODE)
 
@@ -170,11 +170,12 @@ def generate_roadmap(topic: str, level: Optional[map_elements.LearningLevel] = N
             return "No valid response from the agent."
 
 def convert_to_json_str(input_string: str = ""):
-    thing = json.loads(input_string)
+    json_string = json.loads(input_string)
+    thing = map_elements.Roadmap.load_from_json(json_string)
     print("Converter called")
     save_roadmap(thing, f"data\\RoadMaps\\{topic}.json")
     print("File saved")
-    return thing
+    return json_string
 
 def create_new_roadmap(topic, level):
     roadmap = str(generate_roadmap(topic, level))
@@ -182,12 +183,12 @@ def create_new_roadmap(topic, level):
     roadmap = roadmap[(roadmap.find("</think>") + len("</think>") + 2):]
     roadmap = convert_to_json_str(roadmap)
     roadmap = json.loads(roadmap)
-    roadmap = map_elements.Roadmap.from_json(roadmap)
+    roadmap = map_elements.Roadmap.load_from_json(roadmap)
     return roadmap
 
 if __name__ == "__main__":
-    topic = "Roman Empire History"
-    level = 'full'
+    topic = "Agentic AI"
+    level = 'beginner'
 
     roadmap = str(generate_roadmap(topic, level))
     roadmap = roadmap[(roadmap.find("</think>") + len("</think>") + 2):]
