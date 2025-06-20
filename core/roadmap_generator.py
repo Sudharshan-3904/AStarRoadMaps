@@ -187,8 +187,8 @@ def create_new_roadmap(topic, level):
     return roadmap
 
 if __name__ == "__main__":
-    topic = "Agentic AI"
-    level = 'beginner'
+    topic = "Artificial Intelligence"
+    level = 'full'
 
     roadmap = str(generate_roadmap(topic, level))
     roadmap = roadmap[(roadmap.find("</think>") + len("</think>") + 2):]

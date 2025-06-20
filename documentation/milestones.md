@@ -12,11 +12,10 @@
 | Local LLM Integration  | LLM1    | Set up local LLM (LM Studio / Ollama) on your system                            | Done   |
 | Local LLM Integration  | LLM2    | Integrate LLM roadmap generation into `roadmap_generator.py` via `use_llm` flag | Done   |
 | Local LLM Integration  | LLM3    | Add fallback to rule-based structure if LLM fails                               | Done   |
-| User Progress Tracking | UP1     | Add `user_progress.json` to store keyframe completion state                     |        |
-| User Progress Tracking | UP2     | Enable progress update and status toggling (e.g., mark complete)                |        |
-| Visualization          | VS1     | Create `visualizer.py` with Matplotlib or Plotly Gantt chart                    |        |
-| Visualization          | VS2     | Display % progress per stage and roadmap                                        |        |
-| Visualization          | VS3     | Plot radar chart or bar chart for skill areas (optional)                        |        |
+| User Progress Tracking | UP1     | Add `user_progress.json` to store keyframe completion state                     | Done   |
+| User Progress Tracking | UP2     | Enable progress update and status toggling (e.g., mark complete)                | Done   |
+| Visualization          | VS1     | Display % progress per stage and roadmap                                        | Done   |
+| Visualization          | VS2     | Plot radar chart or bar chart for skill areas (optional)                        | ----   |
 | UI Layer (Optional)    | UI1     | Create `dashboard.py` using Streamlit/Gradio                                    |        |
 | UI Layer (Optional)    | UI2     | Display generated roadmap with edit and progress tracking                       |        |
 | UI Layer (Optional)    | UI3     | Add file upload/load, reset, save state features                                |        |
@@ -38,7 +37,7 @@
 1. ✅ **CL1 → CL5**: Core roadmap logic (rule-based).
 2. ✅ **LLM1 → LLM3**: LLM roadmap generation via LangChain.
 3. ✅ **UP1 → UP2**: Store user progress.
-4. ✅ **VS1 → VS3**: Add visualizations.
+4. ✅ **VS1 → VS2**: Add visualizations.
 5. ✅ **UI1 → UI3**: Optional interactive dashboard.
 6. ✅ **DK1 → DK4**: Dockerize everything.
 7. ✅ **UX1 → UX3**: Final polish and personalization.

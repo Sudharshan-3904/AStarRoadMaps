@@ -24,7 +24,7 @@ class Keyframe:
     
     def mark_complete(self):
         self.completed = True
-        self.completed_date = datetime.datetime.now() 
+        self.completed_date = datetime.datetime.now()
 
     def add_resource(self, resource: Resource):
         self.resources.append(resource)
@@ -37,13 +37,16 @@ class Stage:
         self.keyframes = keyframes
         self.completed = completed
         self.completed_date = None
+        self.completed_progress = 0
+        self.completed_precentage = 0.0
 
     def add_keyframe(self, keyframe: Keyframe):
         self.keyframes.append(keyframe)
     
     def mark_complete(self):
         self.completed = True
-        self.completed_date = datetime.datetime.now() 
+        self.completed_date = datetime.datetime.now()
+        self.update_progress()
 
     def progress_percent(self) -> float:
         total = len(self.keyframes)
@@ -51,6 +54,10 @@ class Stage:
             return 0.0
         completed = sum(1 for k in self.keyframes if k.completed)
         return (completed / total) * 100
+
+    def update_progress(self):
+        self.completed_progress = len([x for x in self.keyframes if x.__getattribute__('completed')==True])
+        self.completed_precentage = round((self.completed_progress / len(self.keyframes)) * 100, 2)
 
 @dataclass
 class Roadmap:
@@ -61,10 +68,13 @@ class Roadmap:
         self.level = level
         self.completed = completed
         self.completed_date = None
+        self.completed_progress = 0
+        self.completed_precentage = 0.0
     
     def mark_complete(self):
         self.completed = True
-        self.completed_date = datetime.datetime.now() 
+        self.completed_date = datetime.datetime.now()
+        self.update_progress()
 
     def add_stage(self, stage: Stage):
         self.stages.append(stage)
@@ -80,6 +90,10 @@ class Roadmap:
     def save_to_json(self, filepath: str):
         with open(filepath, "w", encoding="utf-8") as f:
             json.dump(self.to_dict(), f, default=str, indent=4)
+
+    def update_progress(self):
+        self.completed_progress = len([x for x in self.stages if x.__getattribute__('completed')==True])
+        self.completed_precentage = round((self.completed_progress / len(self.stages)) * 100, 2)
 
     @staticmethod
     def load_from_json(filepath: str) -> "Roadmap":
