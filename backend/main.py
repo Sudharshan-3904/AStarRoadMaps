@@ -2,8 +2,10 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
+from utils.logging_config import setup_logging
 from routers import roadmaps, progress
 
+setup_logging()
 load_dotenv()
 
 # Verify API Key

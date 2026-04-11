@@ -1,6 +1,7 @@
 import asyncio
 import json
 import uuid
+import logging
 from datetime import datetime
 from agents.analyst import run_analyst
 from agents.curriculum import run_curriculum
@@ -11,9 +12,11 @@ from models.progress import ProgressState, TopicStatus
 from storage.file_store import save_roadmap, load_roadmap, save_progress, load_progress, save_markdown
 from clients import get_client_and_model, is_openai_client
 
+logger = logging.getLogger(__name__)
+
 def classify_feedback(client, model_name: str, feedback: str) -> str:
-    # Short Claude call: return one of "structure", "resources", "format"
-    system_prompt = "Classify the following user feedback for a learning roadmap into one of these three categories: 'structure' (if it asks to add/remove topics, change phases, adjust depth), 'resources' (if it asks for better links, different tutorials), or 'format' (if it asks for layout, wording, or Markdown style changes). Respond ONLY with the category name."
+    logger.info(f"Classifying feedback: {feedback[:50]}...")
+    system_prompt = "Classify the following user feedback for a learning roadmap into one of these three categories: 'structure', 'resources', or 'format'. Respond ONLY with the category name."
     
     if is_openai_client(client):
         response = client.chat.completions.create(
@@ -34,30 +37,29 @@ def classify_feedback(client, model_name: str, feedback: str) -> str:
         )
         result = response.content[0].text.strip().lower()
     
+    logger.info(f"Feedback classified as: {result}")
     for cat in ["structure", "resources", "format"]:
         if cat in result:
             return cat
-    return "structure" # Default
+    return "structure"
 
 async def run_pipeline(request_data: dict, refinement: dict = None):
-    """
-    Yields SSE event strings.
-    request_data = { "goal": str, "skill_level": str, "hours_per_week": int, "provider": str, "model": str }
-    refinement = { "feedback": str, "feedback_type": "structure"|"resources"|"format", "roadmap_id": str }
-    """
+    roadmap_id = refinement["roadmap_id"] if refinement else str(uuid.uuid4())
+    logger.info(f"Starting pipeline for Roadmap ID: {roadmap_id}")
+    
     client, model_name = get_client_and_model(
         provider=request_data.get("provider"),
         model=request_data.get("model")
     )
+    logger.info(f"Using provider: {request_data.get('provider')} | Model: {model_name}")
 
     def emit(event_type: str, **kwargs) -> str:
         return f"data: {json.dumps({'type': event_type, **kwargs})}\n\n"
 
-    roadmap_id = refinement["roadmap_id"] if refinement else str(uuid.uuid4())
-
     try:
         # --- ANALYST ---
         if not refinement:
+            logger.info("Step: Analyst")
             yield emit("agent_start", agent="analyst")
             spec = run_analyst(
                 client, 
@@ -67,12 +69,14 @@ async def run_pipeline(request_data: dict, refinement: dict = None):
                 request_data["hours_per_week"]
             )
             yield emit("agent_done", agent="analyst")
+            logger.info(f"Analyst finished. Estimated weeks: {spec.estimated_weeks}")
         else:
             old_roadmap = load_roadmap(roadmap_id)
             spec = old_roadmap.spec
 
         # --- CURRICULUM ---
         if not refinement or refinement["feedback_type"] in ("structure",):
+            logger.info("Step: Curriculum")
             yield emit("agent_start", agent="curriculum")
             roadmap_dict = run_curriculum(client, model_name, spec, refinement["feedback"] if refinement else None)
             yield emit("agent_done", agent="curriculum")
@@ -81,14 +85,15 @@ async def run_pipeline(request_data: dict, refinement: dict = None):
 
         # --- RESOURCES ---
         if not refinement or refinement["feedback_type"] in ("structure", "resources"):
+            logger.info("Step: Resources")
             yield emit("agent_start", agent="resources")
             roadmap_dict = run_resources(client, model_name, roadmap_dict)
             yield emit("agent_done", agent="resources")
 
         # --- FORMATTER ---
+        logger.info("Step: Formatter")
         yield emit("agent_start", agent="formatter")
         
-        # Create Roadmap object
         roadmap = Roadmap(
             id=roadmap_id, 
             created_at=datetime.utcnow().isoformat(), 
@@ -96,10 +101,8 @@ async def run_pipeline(request_data: dict, refinement: dict = None):
             **{k: v for k, v in roadmap_dict.items() if k not in ["id", "created_at", "spec"]}
         )
         
-        # Load or Init Progress
         if refinement:
             progress = load_progress(roadmap_id)
-            # Synchronize progress with new roadmap structure if structure changed
             existing_topics = progress.topics.copy()
             new_topics = {}
             for phase in roadmap.phases:
@@ -120,10 +123,10 @@ async def run_pipeline(request_data: dict, refinement: dict = None):
         save_roadmap(roadmap)
         save_progress(progress)
         save_markdown(roadmap_id, markdown)
+        logger.info(f"Roadmap {roadmap_id} saved successfully.")
 
         yield emit("complete", roadmap_id=roadmap_id)
 
     except Exception as e:
-        import traceback
-        traceback.print_exc()
+        logger.error(f"Pipeline failed: {str(e)}", exc_info=True)
         yield emit("error", message=str(e))

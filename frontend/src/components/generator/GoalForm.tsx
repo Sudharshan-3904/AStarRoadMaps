@@ -17,10 +17,15 @@ interface GoalFormProps {
 type Provider = 'anthropic' | 'openrouter' | 'ollama'
 
 const PROVIDER_MODELS: Record<Provider, string[]> = {
-  anthropic: ['claude-3-5-sonnet-20240620', 'claude-3-opus-20240229'],
-  openrouter: ['anthropic/claude-3.5-sonnet', 'openai/gpt-4o', 'meta-llama/llama-3.1-405b-instruct', 'google/gemini-pro-1.5'],
-  ollama: ['llama3', 'mistral', 'phi3', 'codellama']
-}
+  anthropic: ["claude-3-5-sonnet-20240620", "claude-3-opus-20240229"],
+  openrouter: [
+    "anthropic/claude-3.5-sonnet",
+    "openai/gpt-4o",
+    "meta-llama/llama-3.1-405b-instruct",
+    "google/gemini-pro-1.5",
+  ],
+  ollama: ["llama3.2:latest", "qwen3.5:4b", "gemma4:e2b"],
+};
 
 export const GoalForm: React.FC<GoalFormProps> = ({ onSubmit, isLoading }) => {
   const [goal, setGoal] = useState('')

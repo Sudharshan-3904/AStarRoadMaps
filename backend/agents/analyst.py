@@ -1,17 +1,21 @@
 import json
+import logging
 from pathlib import Path
 from models.spec import UserSpec
 from clients import is_openai_client
 
 PROMPTS_DIR = Path(__file__).parent.parent / "prompts"
+logger = logging.getLogger(__name__)
 
 def run_analyst(client, model_name: str, goal: str, skill_level: str, hours_per_week: int) -> UserSpec:
+    logger.info(f"Starting analysis for goal: {goal}")
     prompt_path = PROMPTS_DIR / "analyst_system.txt"
-    with open(prompt_path, "r") as f:
+    with open(prompt_path, "r", encoding="utf-8") as f:
         system_prompt = f.read()
 
     user_message = f"Goal: {goal}\nSkill level: {skill_level}\nHours per week: {hours_per_week}"
     
+    logger.info(f"Calling model: {model_name}...")
     if is_openai_client(client):
         response = client.chat.completions.create(
             model=model_name,
@@ -20,6 +24,7 @@ def run_analyst(client, model_name: str, goal: str, skill_level: str, hours_per_
                 {"role": "user", "content": user_message}
             ],
             max_tokens=4096,
+            response_format={"type": "json_object"} if "sonnet" not in model_name.lower() else None
         )
         content = response.choices[0].message.content
     else:
@@ -31,11 +36,24 @@ def run_analyst(client, model_name: str, goal: str, skill_level: str, hours_per_
         )
         content = response.content[0].text
     
-    # Strip potential markdown fences if model ignored ONLY JSON rule
-    if content.startswith("```json"):
-        content = content.replace("```json", "", 1).rsplit("```", 1)[0].strip()
-    elif content.startswith("```"):
-        content = content.replace("```", "", 1).rsplit("```", 1)[0].strip()
-        
-    data = json.loads(content)
-    return UserSpec(**data)
+    if not content or not content.strip():
+        logger.error("Received empty response from model.")
+        raise ValueError("Analyst Agent: Empty response from model")
+
+    if "<think>" in content:
+        logger.debug("Detected <think> tags, stripping...")
+        content = content.split("</think>")[-1].strip()
+
+    if "```" in content:
+        content = content.split("```")[1]
+        if content.startswith("json"):
+            content = content[4:]
+        content = content.split("```")[0].strip()
+    
+    try:
+        data = json.loads(content)
+        return UserSpec(**data)
+    except json.JSONDecodeError as e:
+        logger.error(f"JSON Decode Error: {e}")
+        logger.debug(f"Problematic content: {content}")
+        raise
