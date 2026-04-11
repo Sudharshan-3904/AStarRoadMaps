@@ -1,8 +1,0 @@
-langchain
-mcp
-duckduckgo-search
-newspaper3k
-streamlit
-plotly
-matplotlib
-langchain-community
