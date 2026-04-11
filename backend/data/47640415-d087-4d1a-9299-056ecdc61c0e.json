@@ -1,0 +1,15 @@
+{
+  "id": "47640415-d087-4d1a-9299-056ecdc61c0e",
+  "title": "Learning Python",
+  "spec": {
+    "goal": "Python",
+    "skill_level": "beginner",
+    "hours_per_week": 10,
+    "estimated_weeks": 0,
+    "provider": "ollama",
+    "model": "llama3.2:latest"
+  },
+  "phases": [],
+  "created_at": "2026-04-11T12:51:33.775141",
+  "status": "pending"
+}

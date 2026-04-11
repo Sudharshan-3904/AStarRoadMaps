@@ -13,6 +13,7 @@ Schema:
       "topics": [
         {
           "name": "Topic Name",
+          "content": "A short 1-2 sentence explanation of why this topic is important and what it covers.",
           "subtopics": ["sub1", "sub2", "sub3"],
           "resources": [],
           "project": "Specific hands-on project description"
@@ -25,6 +26,7 @@ Schema:
 Rules:
 - 3–5 phases flowing from beginner to advanced
 - 2–4 topics per phase
+- Each topic MUST have a "content" field with a helpful explanation.
 - 4–8 subtopics per topic
 - Projects must be specific (not "build something with X")
 - Leave resources as empty arrays

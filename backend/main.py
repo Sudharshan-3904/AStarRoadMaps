@@ -8,9 +8,9 @@ from routers import roadmaps, progress
 setup_logging()
 load_dotenv()
 
-# Verify API Key
-if not os.getenv("ANTHROPIC_API_KEY"):
-    print("WARNING: ANTHROPIC_API_KEY not found in environment.")
+# Verify Configuration
+if not os.getenv("OLLAMA_BASE_URL") and not os.getenv("OPENROUTER_API_KEY"):
+    print("WARNING: Neither OLLAMA_BASE_URL nor OPENROUTER_API_KEY found in environment.")
 
 app = FastAPI(title="Roadmap Creator API")
 

@@ -1,8 +1,6 @@
 import json
 import logging
 from pathlib import Path
-from tools.web_search import WEB_SEARCH_TOOL
-from clients import is_openai_client
 
 PROMPTS_DIR = Path(__file__).parent.parent / "prompts"
 logger = logging.getLogger(__name__)
@@ -13,30 +11,20 @@ def run_resources(client, model_name: str, roadmap_dict: dict) -> dict:
     with open(prompt_path, "r", encoding="utf-8") as f:
         system_prompt = f.read()
 
+    # Note: Tool use (web_search) is currently disabled as it was specific to the native Anthropic API.
+    # We rely on the local model's extensive knowledge for resources.
     user_message = json.dumps(roadmap_dict)
     
-    if is_openai_client(client):
-        response = client.chat.completions.create(
-            model=model_name,
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_message}
-            ],
-            max_tokens=4096,
-        )
-        content = response.choices[0].message.content
-    else:
-        response = client.messages.create(
-            model=model_name,
-            max_tokens=4096,
-            system=system_prompt,
-            tools=[WEB_SEARCH_TOOL],
-            messages=[{"role": "user", "content": user_message}]
-        )
-        text_blocks = [b.text for b in response.content if b.type == "text"]
-        if not text_blocks:
-             raise ValueError("Resource Agent: Empty response from Anthropic")
-        content = text_blocks[-1]
+    response = client.chat.completions.create(
+        model=model_name,
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_message}
+        ],
+        max_tokens=4096,
+        response_format={"type": "json_object"}
+    )
+    content = response.choices[0].message.content
 
     if "<think>" in content:
         content = content.split("</think>")[-1].strip()

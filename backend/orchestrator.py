@@ -10,7 +10,7 @@ from agents.formatter import run_formatter
 from models.roadmap import Roadmap
 from models.progress import ProgressState, TopicStatus
 from storage.file_store import save_roadmap, load_roadmap, save_progress, load_progress, save_markdown
-from clients import get_client_and_model, is_openai_client
+from clients import get_client_and_model
 
 logger = logging.getLogger(__name__)
 
@@ -18,24 +18,15 @@ def classify_feedback(client, model_name: str, feedback: str) -> str:
     logger.info(f"Classifying feedback: {feedback[:50]}...")
     system_prompt = "Classify the following user feedback for a learning roadmap into one of these three categories: 'structure', 'resources', or 'format'. Respond ONLY with the category name."
     
-    if is_openai_client(client):
-        response = client.chat.completions.create(
-            model=model_name,
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": feedback}
-            ],
-            max_tokens=50,
-        )
-        result = response.choices[0].message.content.strip().lower()
-    else:
-        response = client.messages.create(
-            model=model_name,
-            max_tokens=50,
-            messages=[{"role": "user", "content": feedback}],
-            system=system_prompt
-        )
-        result = response.content[0].text.strip().lower()
+    response = client.chat.completions.create(
+        model=model_name,
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": feedback}
+        ],
+        max_tokens=50,
+    )
+    result = response.choices[0].message.content.strip().lower()
     
     logger.info(f"Feedback classified as: {result}")
     for cat in ["structure", "resources", "format"]:
@@ -53,8 +44,8 @@ async def run_pipeline(request_data: dict, refinement: dict = None):
     )
     logger.info(f"Using provider: {request_data.get('provider')} | Model: {model_name}")
 
-    def emit(event_type: str, **kwargs) -> str:
-        return f"data: {json.dumps({'type': event_type, **kwargs})}\n\n"
+    def emit(event_type: str, **kwargs) -> dict:
+        return {"data": json.dumps({"type": event_type, **kwargs})}
 
     try:
         # --- ANALYST ---

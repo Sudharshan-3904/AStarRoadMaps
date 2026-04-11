@@ -2,7 +2,6 @@ import json
 import logging
 from pathlib import Path
 from models.spec import UserSpec
-from clients import is_openai_client
 
 PROMPTS_DIR = Path(__file__).parent.parent / "prompts"
 logger = logging.getLogger(__name__)
@@ -15,33 +14,23 @@ def run_analyst(client, model_name: str, goal: str, skill_level: str, hours_per_
 
     user_message = f"Goal: {goal}\nSkill level: {skill_level}\nHours per week: {hours_per_week}"
     
-    logger.info(f"Calling model: {model_name}...")
-    if is_openai_client(client):
-        response = client.chat.completions.create(
-            model=model_name,
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_message}
-            ],
-            max_tokens=4096,
-            response_format={"type": "json_object"} if "sonnet" not in model_name.lower() else None
-        )
-        content = response.choices[0].message.content
-    else:
-        response = client.messages.create(
-            model=model_name,
-            max_tokens=4096,
-            system=system_prompt,
-            messages=[{"role": "user", "content": user_message}]
-        )
-        content = response.content[0].text
+    logger.info(f"Calling Ollama model: {model_name}...")
+    response = client.chat.completions.create(
+        model=model_name,
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_message}
+        ],
+        max_tokens=4096,
+        response_format={"type": "json_object"}
+    )
+    content = response.choices[0].message.content
     
     if not content or not content.strip():
         logger.error("Received empty response from model.")
         raise ValueError("Analyst Agent: Empty response from model")
 
     if "<think>" in content:
-        logger.debug("Detected <think> tags, stripping...")
         content = content.split("</think>")[-1].strip()
 
     if "```" in content:

@@ -1,6 +1,6 @@
 # 🗺️ AI Learning Roadmap Creator
 
-A full-stack application that generates personalized, structured learning roadmaps using Claude AI. Inspired by [roadmap.sh](https://roadmap.sh), it takes your learning goal and produces a rich, interactive roadmap — powered by a **FastAPI** backend with multi-agent AI and a **React + Vite** frontend.
+A full-stack application that generates personalized, structured learning roadmaps using AI Agents. Inspired by [roadmap.sh](https://roadmap.sh), it takes your learning goal and produces a rich, interactive roadmap — powered by a **FastAPI** backend with multi-agent AI and a **React + Vite** frontend.
 
 ---
 
@@ -10,7 +10,7 @@ A full-stack application that generates personalized, structured learning roadma
 | ----------- | -------------------------------------------------- |
 | Frontend    | React 18, Vite, Tailwind CSS                       |
 | Backend     | Python 3.10+, FastAPI, Uvicorn                     |
-| AI          | Anthropic Claude (multi-agent pipeline)            |
+| AI          | Open AI, Open Router, Ollama (multi-agent pipeline)            |
 | State       | React Query (server state), Zustand (client state) |
 | Persistence | JSON files on disk (progress tracking)             |
 
@@ -18,7 +18,7 @@ A full-stack application that generates personalized, structured learning roadma
 
 ## ✨ Features
 
-- **Multi-agent pipeline** — four specialized Claude agents (Analyst → Curriculum → Resource → Formatter) work in sequence
+- **Multi-agent pipeline** — four specialized AI agents (Analyst → Curriculum → Resource → Formatter) work in sequence
 - **Real-time streaming** — agent progress streamed to the UI via Server-Sent Events (SSE)
 - **Iterative refinement** — submit feedback on the generated roadmap and re-run targeted agents
 - **Interactive roadmap UI** — expand/collapse phases, mark topics as done/in-progress, visual progress bars

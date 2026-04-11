@@ -12,4 +12,4 @@ class UserSpec(BaseModel):
     hours_per_week: int
     estimated_weeks: int
     provider: str = "openrouter"
-    model: str = "anthropic/claude-3.5-sonnet"
+    model: str = "openai/gpt-oss-20b:free"

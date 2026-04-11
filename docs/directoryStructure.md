@@ -124,7 +124,7 @@ roadmap-creator/
 ## Key Boundaries
 
 ### Backend owns
-- All Claude API calls (never exposed to frontend)
+- All LLM API calls (never exposed to frontend)
 - Roadmap generation logic and agent orchestration
 - File persistence (`data/`)
 - SSE event emission

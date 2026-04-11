@@ -23,7 +23,7 @@ export const Home: React.FC = () => {
       <section className="text-center mb-20">
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-800/50 border border-slate-700/50 text-teal-400 text-xs font-bold uppercase tracking-widest mb-8 animate-in fade-in slide-in-from-top-4 duration-1000">
           <Sparkles className="w-4 h-4" />
-          Choose the model that suits you best
+          Personalized AI Roadmaps
         </div>
 
         <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 leading-tight tracking-tight px-4 font-sora">

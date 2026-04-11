@@ -9,6 +9,7 @@ class Resource(BaseModel):
 
 class Topic(BaseModel):
     name: str
+    content: Optional[str] = ""
     subtopics: List[str]
     resources: List[Resource] = []
     project: Optional[str] = None

@@ -1,0 +1,15 @@
+{
+  "id": "ac0a68b7-db93-4d43-98d0-bd93f0e43b2b",
+  "title": "Learning Python",
+  "spec": {
+    "goal": "Python",
+    "skill_level": "beginner",
+    "hours_per_week": 10,
+    "estimated_weeks": 0,
+    "provider": "openrouter",
+    "model": "openai/gpt-oss-20b:free"
+  },
+  "phases": [],
+  "created_at": "2026-04-11T13:06:47.552240",
+  "status": "pending"
+}

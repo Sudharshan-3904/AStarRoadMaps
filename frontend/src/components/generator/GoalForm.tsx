@@ -14,17 +14,11 @@ interface GoalFormProps {
   isLoading: boolean
 }
 
-type Provider = 'anthropic' | 'openrouter' | 'ollama'
+type Provider = 'openrouter' | 'ollama'
 
 const PROVIDER_MODELS: Record<Provider, string[]> = {
-  anthropic: ["claude-3-5-sonnet-20240620", "claude-3-opus-20240229"],
-  openrouter: [
-    "anthropic/claude-3.5-sonnet",
-    "openai/gpt-4o",
-    "meta-llama/llama-3.1-405b-instruct",
-    "google/gemini-pro-1.5",
-  ],
-  ollama: ["llama3.2:latest", "qwen3.5:4b", "gemma4:e2b"],
+  openrouter: ["openai/gpt-oss-20b:free"],
+  ollama: ["llama3.2:latest", "qwen2.5:latest", "mistral:latest"],
 };
 
 export const GoalForm: React.FC<GoalFormProps> = ({ onSubmit, isLoading }) => {
@@ -32,8 +26,8 @@ export const GoalForm: React.FC<GoalFormProps> = ({ onSubmit, isLoading }) => {
   const [skillLevel, setSkillLevel] = useState<SkillLevel>('beginner')
   const [hoursPerWeek, setHoursPerWeek] = useState(10)
   
-  const [provider, setProvider] = useState<Provider>('openrouter')
-  const [model, setModel] = useState(PROVIDER_MODELS.openrouter[0])
+  const [provider, setProvider] = useState<Provider>('ollama')
+  const [model, setModel] = useState(PROVIDER_MODELS.ollama[0])
   const [showSettings, setShowSettings] = useState(false)
 
   // Sync model when provider changes
@@ -127,8 +121,8 @@ export const GoalForm: React.FC<GoalFormProps> = ({ onSubmit, isLoading }) => {
               <label className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase tracking-widest">
                 AI Provider
               </label>
-              <div className="grid grid-cols-3 gap-2">
-                {(['anthropic', 'openrouter', 'ollama'] as const).map((p) => (
+              <div className="grid grid-cols-2 gap-2">
+                {(['openrouter', 'ollama'] as const).map((p) => (
                   <button
                     key={p}
                     type="button"
