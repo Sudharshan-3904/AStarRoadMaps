@@ -8,27 +8,26 @@ Schema:
   "phases": [
     {
       "phase_number": 1,
-      "title": "Foundations",
-      "week_range": "Week 1–4",
+      "title": "Phase Title",
+      "week_range": "Week X–Y",
       "topics": [
         {
           "name": "Topic Name",
-          "content": "A short 1-2 sentence explanation of why this topic is important and what it covers.",
-          "subtopics": ["sub1", "sub2", "sub3"],
+          "content": "Short explanation",
+          "subtopics": ["sub1", "sub2"],
           "resources": [],
-          "project": "Specific hands-on project description"
+          "project": "Project desc"
         }
       ]
     }
   ]
 }
 
-Rules:
-- 3–5 phases flowing from beginner to advanced
-- 2–4 topics per phase
-- Each topic MUST have a "content" field with a helpful explanation.
-- 4–8 subtopics per topic
-- Projects must be specific (not "build something with X")
-- Leave resources as empty arrays
-- Respect skill_level (skip basics for advanced, slow down for beginners)
-- Respect hours_per_week when deciding topic density
+RULES FOR STRUCTURAL INTEGRITY:
+1. Every item in the "phases" array MUST be an object with "phase_number", "title", "week_range", and "topics" keys.
+2. Every item in the "topics" array MUST be an object with "name", "content", "subtopics", "resources" (empty array), and "project".
+3. Provide 3–5 phases.
+4. Provide 2–4 topics per phase.
+5. Provide 4–8 subtopics per topic.
+6. Topic "content" should be a meaningful 1-2 sentence explanation.
+7. Respect skill_level and hours_per_week.

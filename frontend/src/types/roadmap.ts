@@ -11,6 +11,7 @@ export interface Resource {
 
 export interface Topic {
   name: string
+  content?: string
   subtopics: string[]
   resources: Resource[]
   project?: string
