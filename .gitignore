@@ -1,0 +1,6 @@
+logs
+__pycache__
+node_modules
+
+*.env
+logs
