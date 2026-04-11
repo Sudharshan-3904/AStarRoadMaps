@@ -42,10 +42,13 @@ def classify_feedback(client, model_name: str, feedback: str) -> str:
 async def run_pipeline(request_data: dict, refinement: dict = None):
     """
     Yields SSE event strings.
-    request_data = { "goal": str, "skill_level": str, "hours_per_week": int }
+    request_data = { "goal": str, "skill_level": str, "hours_per_week": int, "provider": str, "model": str }
     refinement = { "feedback": str, "feedback_type": "structure"|"resources"|"format", "roadmap_id": str }
     """
-    client, model_name = get_client_and_model()
+    client, model_name = get_client_and_model(
+        provider=request_data.get("provider"),
+        model=request_data.get("model")
+    )
 
     def emit(event_type: str, **kwargs) -> str:
         return f"data: {json.dumps({'type': event_type, **kwargs})}\n\n"

@@ -5,6 +5,8 @@ class GenerateRequest(BaseModel):
     goal: str
     skill_level: SkillLevel
     hours_per_week: int
+    provider: str = "openrouter" # "anthropic" | "openrouter" | "ollama"
+    model: str = "anthropic/claude-3.5-sonnet"
 
 class RefineRequest(BaseModel):
     feedback: str

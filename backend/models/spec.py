@@ -11,3 +11,5 @@ class UserSpec(BaseModel):
     skill_level: SkillLevel
     hours_per_week: int
     estimated_weeks: int
+    provider: str = "openrouter"
+    model: str = "anthropic/claude-3.5-sonnet"

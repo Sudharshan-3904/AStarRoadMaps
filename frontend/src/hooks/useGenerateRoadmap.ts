@@ -6,6 +6,8 @@ interface GenerateRequest {
   goal: string
   skill_level: SkillLevel
   hours_per_week: number
+  provider: string
+  model: string
 }
 
 interface GenerateResponse {

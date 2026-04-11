@@ -27,7 +27,9 @@ async def generate(body: GenerateRequest) -> GenerateResponse:
             goal=body.goal,
             skill_level=body.skill_level,
             hours_per_week=body.hours_per_week,
-            estimated_weeks=0 # To be determined by analyst
+            estimated_weeks=0, # To be determined by analyst
+            provider=body.provider,
+            model=body.model
         ),
         phases=[],
         created_at=datetime.utcnow().isoformat(),
@@ -48,7 +50,9 @@ async def stream(roadmap_id: str, feedback: str = None, feedback_type: str = Non
     request_data = {
         "goal": roadmap.spec.goal,
         "skill_level": roadmap.spec.skill_level,
-        "hours_per_week": roadmap.spec.hours_per_week
+        "hours_per_week": roadmap.spec.hours_per_week,
+        "provider": roadmap.spec.provider,
+        "model": roadmap.spec.model
     }
     
     refinement = None
@@ -77,7 +81,10 @@ async def get_markdown(roadmap_id: str):
 
 @router.patch("/{roadmap_id}/refine")
 async def refine(roadmap_id: str, body: RefineRequest):
-    client, model_name = get_client_and_model()
+    client, model_name = get_client_and_model(
+        provider=roadmap.spec.provider,
+        model=roadmap.spec.model
+    )
     try:
         roadmap = load_roadmap(roadmap_id)
     except FileNotFoundError:

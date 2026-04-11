@@ -23,16 +23,20 @@ export const Home: React.FC = () => {
       <section className="text-center mb-20">
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-800/50 border border-slate-700/50 text-teal-400 text-xs font-bold uppercase tracking-widest mb-8 animate-in fade-in slide-in-from-top-4 duration-1000">
           <Sparkles className="w-4 h-4" />
-          Empowered by Claude 3.5 Sonnet
+          Choose the model that suits you best
         </div>
-        
+
         <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 leading-tight tracking-tight px-4 font-sora">
           Master Any Skill <br className="hidden md:block" />
-          with <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-400">Precision.</span>
+          with{" "}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-400">
+            Precision.
+          </span>
         </h1>
-        
+
         <p className="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
-          The ultimate AI-powered roadmap generator. Go from zero to mastery with expert-curated modules and specialized resources.
+          The ultimate AI-powered roadmap generator. Go from zero to mastery
+          with expert-curated modules and specialized resources.
         </p>
       </section>
 
@@ -46,24 +50,24 @@ export const Home: React.FC = () => {
 
       {/* Features Grid */}
       <section className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <FeatureCard 
+        <FeatureCard
           icon={<Brain className="w-8 h-8 text-teal-400" />}
           title="Intelligent Analysis"
           description="Advanced reasoning models analyze your goal to create a perfectly structured study path."
         />
-        <FeatureCard 
+        <FeatureCard
           icon={<Zap className="w-8 h-8 text-emerald-400" />}
           title="Optimized Path"
           description="Focus on what truly matters. We skip the fluff and direct you to the most efficient learning route."
         />
-        <FeatureCard 
+        <FeatureCard
           icon={<Shield className="w-8 h-8 text-blue-400" />}
           title="Verified Resources"
           description="Every link is checked for quality. Get official docs, top tutorials, and project ideas."
         />
       </section>
     </PageShell>
-  )
+  );
 }
 
 const FeatureCard: React.FC<{ icon: React.ReactNode; title: string, description: string }> = ({ icon, title, description }) => (
