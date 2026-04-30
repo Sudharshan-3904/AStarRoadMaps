@@ -1,16 +1,9 @@
 import React, { useState } from 'react'
-import { ChevronDown, ChevronUp, Box, Clock, Target } from 'lucide-react'
-import { Phase, TopicStatus } from '../../types/roadmap'
+import { ChevronDown, ChevronUp, Clock } from 'lucide-react'
 import { TopicCard } from './TopicCard'
 import { ProgressBar } from './ProgressBar'
 
-interface PhaseCardProps {
-  phase: Phase
-  topicsProgress: Record<string, TopicStatus>
-  onTopicStatusChange: (topicName: string, status: TopicStatus) => void
-}
-
-export const PhaseCard: React.FC<PhaseCardProps> = ({ 
+export const PhaseCard = ({ 
   phase, 
   topicsProgress, 
   onTopicStatusChange 

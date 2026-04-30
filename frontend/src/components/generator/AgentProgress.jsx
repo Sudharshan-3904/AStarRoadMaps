@@ -1,16 +1,15 @@
 import React from 'react'
 import { CheckCircle2, Circle, Loader2, XCircle } from 'lucide-react'
 import { useRoadmapStore } from '../../store/useRoadmapStore'
-import { AgentName } from '../../types/roadmap'
 
-const agentsOrder: { id: AgentName; label: string; description: string }[] = [
+const agentsOrder = [
   { id: 'analyst', label: 'Analyst Agent', description: 'Personalizing your learning path...' },
   { id: 'curriculum', label: 'Curriculum Agent', description: 'Designing study modules...' },
   { id: 'resources', label: 'Resource Agent', description: 'Finding the best tutorials...' },
   { id: 'formatter', label: 'Formatter Agent', description: 'Preparing your interactive view...' }
 ]
 
-export const AgentProgress: React.FC = () => {
+export const AgentProgress = () => {
   const agentStatuses = useRoadmapStore((state) => state.agentStatuses)
 
   return (

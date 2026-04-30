@@ -1,32 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import { Button } from '../ui/Button'
-import { SkillLevel } from '../../types/roadmap'
 import { Target, BarChart, Clock, Settings, Cpu } from 'lucide-react'
 
-interface GoalFormProps {
-  onSubmit: (data: { 
-    goal: string; 
-    skill_level: SkillLevel; 
-    hours_per_week: number;
-    provider: string;
-    model: string;
-  }) => void
-  isLoading: boolean
-}
-
-type Provider = 'openrouter' | 'ollama'
-
-const PROVIDER_MODELS: Record<Provider, string[]> = {
+const PROVIDER_MODELS = {
   openrouter: ["openai/gpt-oss-20b:free"],
   ollama: ["llama3.2:latest", "qwen2.5:latest", "mistral:latest"],
 };
 
-export const GoalForm: React.FC<GoalFormProps> = ({ onSubmit, isLoading }) => {
+export const GoalForm = ({ onSubmit, isLoading }) => {
   const [goal, setGoal] = useState('')
-  const [skillLevel, setSkillLevel] = useState<SkillLevel>('beginner')
+  const [skillLevel, setSkillLevel] = useState('beginner')
   const [hoursPerWeek, setHoursPerWeek] = useState(10)
   
-  const [provider, setProvider] = useState<Provider>('ollama')
+  const [provider, setProvider] = useState('ollama')
   const [model, setModel] = useState(PROVIDER_MODELS.ollama[0])
   const [showSettings, setShowSettings] = useState(false)
 
@@ -35,7 +21,7 @@ export const GoalForm: React.FC<GoalFormProps> = ({ onSubmit, isLoading }) => {
     setModel(PROVIDER_MODELS[provider][0])
   }, [provider])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault()
     if (!goal.trim()) return
     onSubmit({ 
@@ -74,7 +60,7 @@ export const GoalForm: React.FC<GoalFormProps> = ({ onSubmit, isLoading }) => {
           <select
             id="skill-level"
             value={skillLevel}
-            onChange={(e) => setSkillLevel(e.target.value as SkillLevel)}
+            onChange={(e) => setSkillLevel(e.target.value)}
             className="w-full px-6 py-4 bg-slate-950/50 border border-slate-700/50 rounded-2xl text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500/50 transition-all cursor-pointer appearance-none text-lg font-medium"
           >
             <option value="beginner">Beginner</option>
@@ -122,7 +108,7 @@ export const GoalForm: React.FC<GoalFormProps> = ({ onSubmit, isLoading }) => {
                 AI Provider
               </label>
               <div className="grid grid-cols-2 gap-2">
-                {(['openrouter', 'ollama'] as const).map((p) => (
+                {['openrouter', 'ollama'].map((p) => (
                   <button
                     key={p}
                     type="button"

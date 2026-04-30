@@ -6,8 +6,8 @@ import { useRoadmapStream } from '../hooks/useRoadmapStream'
 import { useRoadmapStore } from '../store/useRoadmapStore'
 import { AlertCircle } from 'lucide-react'
 
-export const Generate: React.FC = () => {
-  const { roadmapId } = useParams<{ roadmapId: string }>()
+export const Generate = () => {
+  const { roadmapId } = useParams()
   const navigate = useNavigate()
   const { error } = useRoadmapStream(roadmapId || null)
   const agentStatuses = useRoadmapStore((state) => state.agentStatuses)

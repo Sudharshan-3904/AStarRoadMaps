@@ -1,12 +1,7 @@
 import React from 'react'
 import { BookOpen, Video, FileText, Wrench, ExternalLink } from 'lucide-react'
-import { Resource } from '../../types/roadmap'
 
-interface ResourceLinkProps {
-  resource: Resource
-}
-
-export const ResourceLink: React.FC<ResourceLinkProps> = ({ resource }) => {
+export const ResourceLink = ({ resource }) => {
   const getIcon = () => {
     switch (resource.type) {
       case 'docs': return <BookOpen className="w-4 h-4" />

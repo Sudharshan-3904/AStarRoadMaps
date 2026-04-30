@@ -1,11 +1,10 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useRoadmapStore } from '../store/useRoadmapStore'
-import { SSEEvent } from '../types/roadmap'
 import { useQueryClient } from '@tanstack/react-query'
 
-export const useRoadmapStream = (roadmapId: string | null, feedback?: string, feedbackType?: string) => {
+export const useRoadmapStream = (roadmapId, feedback, feedbackType) => {
   const [isStreaming, setIsStreaming] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState(null)
   const setAgentStatus = useRoadmapStore((state) => state.setAgentStatus)
   const queryClient = useQueryClient()
 
@@ -32,7 +31,7 @@ export const useRoadmapStream = (roadmapId: string | null, feedback?: string, fe
 
     eventSource.onmessage = (event) => {
       try {
-        const data: SSEEvent = JSON.parse(event.data)
+        const data = JSON.parse(event.data)
         console.log(`[SSE] Received event: ${data.type}`, data)
 
         switch (data.type) {
@@ -63,7 +62,7 @@ export const useRoadmapStream = (roadmapId: string | null, feedback?: string, fe
       }
     }
 
-    eventSource.onerror = (err: any) => {
+    eventSource.onerror = (err) => {
       // EventSource readyState: 0 = CONNECTING, 1 = OPEN, 2 = CLOSED
       if (eventSource.readyState === EventSource.CLOSED) {
         console.log('[SSE] Connection closed cleanly.')

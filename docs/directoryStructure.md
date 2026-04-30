@@ -1,7 +1,7 @@
 # 📁 Directory Structure
 
 ```
-roadmap-creator/
+AStarRoadMaps/
 │
 ├── backend/                            # FastAPI application
 │   ├── main.py                         # App entry point, registers routers, CORS config

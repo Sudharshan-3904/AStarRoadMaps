@@ -1,15 +1,8 @@
 import React from 'react'
-import { Topic, TopicStatus } from '../../types/roadmap'
 import { ResourceLink } from './ResourceLink'
-import { CheckCircle2, Circle, Clock, Boxes, Lightbulb } from 'lucide-react'
+import { CheckCircle2, Clock, Boxes, Lightbulb, Circle } from 'lucide-react'
 
-interface TopicCardProps {
-  topic: Topic
-  status?: TopicStatus
-  onStatusChange: (status: TopicStatus) => void
-}
-
-export const TopicCard: React.FC<TopicCardProps> = ({ topic, status = 'not_started', onStatusChange }) => {
+export const TopicCard = ({ topic, status = 'not_started', onStatusChange }) => {
   const getStatusIcon = () => {
     switch (status) {
       case 'done': return <CheckCircle2 className="w-5 h-5 text-emerald-500" />
@@ -52,7 +45,7 @@ export const TopicCard: React.FC<TopicCardProps> = ({ topic, status = 'not_start
 
         <select
           value={status}
-          onChange={(e) => onStatusChange(e.target.value as TopicStatus)}
+          onChange={(e) => onStatusChange(e.target.value)}
           className="bg-slate-800 border-none rounded-lg text-xs font-bold text-slate-300 px-3 py-2 cursor-pointer hover:bg-slate-700 transition-colors focus:ring-1 focus:ring-teal-500"
         >
           <option value="not_started">To Do</option>

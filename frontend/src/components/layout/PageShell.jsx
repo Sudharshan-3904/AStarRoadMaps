@@ -1,11 +1,7 @@
 import React from 'react'
 import { Navbar } from './Navbar'
 
-interface PageShellProps {
-  children: React.ReactNode
-}
-
-export const PageShell: React.FC<PageShellProps> = ({ children }) => {
+export const PageShell = ({ children }) => {
   return (
     <div className="min-h-screen bg-[#020617] text-slate-200 selection:bg-teal-500/30 selection:text-teal-200 overflow-x-hidden">
       {/* Dynamic Background Elements */}

@@ -1,11 +1,6 @@
 import React from 'react'
-import { TopicStatus } from '../../types/roadmap'
 
-interface StatusBadgeProps {
-  status: TopicStatus
-}
-
-export const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
+export const StatusBadge = ({ status }) => {
   const styles = {
     not_started: 'bg-slate-700/50 text-slate-400 border-slate-600/50',
     in_progress: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20',

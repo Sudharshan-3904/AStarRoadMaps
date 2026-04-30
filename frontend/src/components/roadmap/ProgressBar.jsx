@@ -1,13 +1,6 @@
 import React from 'react'
 
-interface ProgressBarProps {
-  progress: number // 0 to 100
-  color?: string
-  size?: 'sm' | 'md'
-  showLabel?: boolean
-}
-
-export const ProgressBar: React.FC<ProgressBarProps> = ({ 
+export const ProgressBar = ({ 
   progress, 
   color = 'bg-teal-500', 
   size = 'sm',

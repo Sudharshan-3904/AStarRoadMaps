@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useParams, useLocation } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { PageShell } from '../components/layout/PageShell'
 import { RoadmapHeader } from '../components/roadmap/RoadmapHeader'
 import { PhaseCard } from '../components/roadmap/PhaseCard'
@@ -12,17 +12,16 @@ import { useRefine } from '../hooks/useRefine'
 import { useRoadmapStream } from '../hooks/useRoadmapStream'
 import { Spinner } from '../components/ui/Spinner'
 
-export const Roadmap: React.FC = () => {
-  const { roadmapId } = useParams<{ roadmapId: string }>()
-  const location = useLocation()
+export const Roadmap = () => {
+  const { roadmapId } = useParams()
   
   const { data: roadmap, isLoading: roadmapLoading } = useRoadmap(roadmapId || null)
   const { data: progress, updateProgress } = useProgress(roadmapId || null)
-  const { mutate: refine, isPending: refinementSending, data: refinementData } = useRefine(roadmapId || null)
+  const { mutate: refine, isPending: refinementSending } = useRefine(roadmapId || null)
 
   // Feedback state for SSE stream if refining
-  const [activeFeedback, setActiveFeedback] = useState<string | undefined>(undefined)
-  const [activeFeedbackType, setActiveFeedbackType] = useState<string | undefined>(undefined)
+  const [activeFeedback, setActiveFeedback] = useState(undefined)
+  const [activeFeedbackType, setActiveFeedbackType] = useState(undefined)
   
   const { isStreaming } = useRoadmapStream(
     activeFeedback ? (roadmapId || null) : null,
@@ -30,7 +29,7 @@ export const Roadmap: React.FC = () => {
     activeFeedbackType
   )
 
-  const handleRefine = (feedback: string) => {
+  const handleRefine = (feedback) => {
     refine({ feedback }, {
       onSuccess: (data) => {
         setActiveFeedback(data.feedback)

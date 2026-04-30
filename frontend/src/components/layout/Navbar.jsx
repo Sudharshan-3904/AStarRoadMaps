@@ -1,8 +1,8 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Compass, List, Sparkles } from 'lucide-react'
+import { Compass, List } from 'lucide-react'
 
-export const Navbar: React.FC = () => {
+export const Navbar = () => {
   const location = useLocation()
 
   return (
@@ -38,7 +38,7 @@ export const Navbar: React.FC = () => {
   )
 }
 
-const NavLink: React.FC<{ to: string; active: boolean; label: string; icon?: React.ReactNode }> = ({ to, active, label, icon }) => (
+const NavLink = ({ to, active, label, icon }) => (
   <Link 
     to={to} 
     className={`px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-2 transition-all duration-200 ${

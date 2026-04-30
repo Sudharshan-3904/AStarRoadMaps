@@ -3,13 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import { PageShell } from '../components/layout/PageShell'
 import { GoalForm } from '../components/generator/GoalForm'
 import { useGenerateRoadmap } from '../hooks/useGenerateRoadmap'
-import { Sparkles, Brain, Rocket, Shield, Zap } from 'lucide-react'
+import { Sparkles, Brain, Shield, Zap } from 'lucide-react'
 
-export const Home: React.FC = () => {
+export const Home = () => {
   const navigate = useNavigate()
   const { mutate: generate, isPending } = useGenerateRoadmap()
 
-  const handleSubmit = (data: any) => {
+  const handleSubmit = (data) => {
     generate(data, {
       onSuccess: ({ roadmap_id }) => {
         navigate(`/generate/${roadmap_id}`)
@@ -70,7 +70,7 @@ export const Home: React.FC = () => {
   );
 }
 
-const FeatureCard: React.FC<{ icon: React.ReactNode; title: string, description: string }> = ({ icon, title, description }) => (
+const FeatureCard = ({ icon, title, description }) => (
   <div className="p-8 bg-slate-900/40 border border-slate-800/50 rounded-2xl hover:bg-slate-800/40 transition-all duration-300 hover:scale-[1.02] group">
     <div className="mb-6 p-4 bg-slate-950 rounded-2xl w-fit group-hover:rotate-6 transition-transform">
       {icon}

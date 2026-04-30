@@ -1,13 +1,8 @@
 import React from 'react'
 import { Download, Calendar, Target, Clock, Trophy } from 'lucide-react'
-import { Roadmap } from '../../types/roadmap'
 import { Button } from '../ui/Button'
 
-interface RoadmapHeaderProps {
-  roadmap: Roadmap
-}
-
-export const RoadmapHeader: React.FC<RoadmapHeaderProps> = ({ roadmap }) => {
+export const RoadmapHeader = ({ roadmap }) => {
   const downloadMarkdown = () => {
     window.location.href = `/api/roadmaps/${roadmap.id}/markdown`
   }
@@ -39,7 +34,7 @@ export const RoadmapHeader: React.FC<RoadmapHeaderProps> = ({ roadmap }) => {
   )
 }
 
-const StatCard: React.FC<{ icon: React.ReactNode; label: string; value: string }> = ({ icon, label, value }) => (
+const StatCard = ({ icon, label, value }) => (
   <div className="bg-slate-800/40 border border-slate-700/50 rounded-xl p-4 flex items-center space-x-3">
     <div className="bg-slate-900/50 p-2 rounded-lg">
       {icon}

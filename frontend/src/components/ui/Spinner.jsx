@@ -1,11 +1,6 @@
 import React from 'react'
 
-interface SpinnerProps {
-  size?: 'sm' | 'md' | 'lg'
-  className?: string
-}
-
-export const Spinner: React.FC<SpinnerProps> = ({ size = 'md', className = '' }) => {
+export const Spinner = ({ size = 'md', className = '' }) => {
   const sizes = {
     sm: 'h-4 w-4 stroke-[3px]',
     md: 'h-8 w-8 stroke-[2px]',

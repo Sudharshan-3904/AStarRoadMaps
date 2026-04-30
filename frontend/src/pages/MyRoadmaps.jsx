@@ -6,9 +6,8 @@ import { Card } from '../components/ui/Card'
 import { Badge } from '../components/ui/Badge'
 import { Calendar, Layers, ArrowRight } from 'lucide-react'
 import { Spinner } from '../components/ui/Spinner'
-import { RoadmapListItem } from '../types/roadmap'
 
-export const MyRoadmaps: React.FC = () => {
+export const MyRoadmaps = () => {
   const { data: roadmaps, isLoading } = useRoadmapsList()
 
   if (isLoading) {
@@ -31,7 +30,7 @@ export const MyRoadmaps: React.FC = () => {
 
         {roadmaps && roadmaps.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {roadmaps.map((roadmap: RoadmapListItem) => (
+            {roadmaps.map((roadmap) => (
               <RoadmapItemCard key={roadmap.id} roadmap={roadmap} />
             ))}
           </div>
@@ -57,7 +56,7 @@ export const MyRoadmaps: React.FC = () => {
   )
 }
 
-const RoadmapItemCard: React.FC<{ roadmap: RoadmapListItem }> = ({ roadmap }) => {
+const RoadmapItemCard = ({ roadmap }) => {
   const date = new Date(roadmap.created_at).toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',

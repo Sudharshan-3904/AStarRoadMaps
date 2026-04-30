@@ -1,16 +1,11 @@
 import React, { useState } from 'react'
-import { MessageSquare, Sparkles } from 'lucide-react'
+import { Sparkles } from 'lucide-react'
 import { Button } from '../ui/Button'
 
-interface RefinePanelProps {
-  onSubmit: (feedback: string) => void
-  isLoading: boolean
-}
-
-export const RefinePanel: React.FC<RefinePanelProps> = ({ onSubmit, isLoading }) => {
+export const RefinePanel = ({ onSubmit, isLoading }) => {
   const [feedback, setFeedback] = useState('')
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault()
     if (!feedback.trim()) return
     onSubmit(feedback)

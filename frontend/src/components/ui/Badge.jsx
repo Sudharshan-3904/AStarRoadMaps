@@ -1,11 +1,6 @@
 import React from 'react'
 
-interface BadgeProps {
-  children: React.ReactNode
-  variant?: 'blue' | 'yellow' | 'orange' | 'red' | 'teal' | 'slate'
-}
-
-export const Badge: React.FC<BadgeProps> = ({ children, variant = 'slate' }) => {
+export const Badge = ({ children, variant = 'slate' }) => {
   const variants = {
     blue: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
     yellow: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
