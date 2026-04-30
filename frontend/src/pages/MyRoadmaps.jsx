@@ -1,10 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { PageShell } from '../components/layout/PageShell'
-import { useRoadmapsList } from '../hooks/useRoadmap'
+import { useRoadmapsList, useDeleteRoadmap } from '../hooks/useRoadmap'
 import { Card } from '../components/ui/Card'
 import { Badge } from '../components/ui/Badge'
-import { Calendar, Layers, ArrowRight } from 'lucide-react'
+import { Calendar, Layers, ArrowRight, Trash2 } from 'lucide-react'
 import { Spinner } from '../components/ui/Spinner'
 
 export const MyRoadmaps = () => {
@@ -57,21 +57,43 @@ export const MyRoadmaps = () => {
 }
 
 const RoadmapItemCard = ({ roadmap }) => {
+  const { mutate: deleteRoadmap } = useDeleteRoadmap()
+
   const date = new Date(roadmap.created_at).toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
     year: 'numeric'
   })
 
+  const handleDelete = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (window.confirm('Are you sure you want to delete this roadmap?')) {
+      deleteRoadmap(roadmap.id)
+    }
+  }
+
   return (
-    <Link to={`/roadmap/${roadmap.id}`}>
-      <Card className="group h-full flex flex-col justify-between">
+    <Link to={`/roadmap/${roadmap.id}`} className="block h-full">
+      <Card className="group h-full flex flex-col justify-between relative overflow-hidden">
+        {/* Subtle background glow on hover */}
+        <div className="absolute -inset-1 bg-gradient-to-r from-teal-500/20 to-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity blur-2xl -z-10" />
+        
         <div>
           <div className="flex items-center justify-between mb-4">
             <Badge variant="teal">{roadmap.status}</Badge>
-            <div className="flex items-center text-[10px] text-slate-500 uppercase tracking-widest font-bold">
-              <Calendar className="w-3 h-3 mr-1" />
-              {date}
+            <div className="flex items-center gap-3">
+              <div className="flex items-center text-[10px] text-slate-500 uppercase tracking-widest font-bold">
+                <Calendar className="w-3 h-3 mr-1" />
+                {date}
+              </div>
+              <button 
+                onClick={handleDelete}
+                className="p-1.5 text-slate-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors z-10"
+                title="Delete Roadmap"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
             </div>
           </div>
           <h3 className="text-xl font-bold text-slate-100 mb-2 group-hover:text-teal-400 transition-colors line-clamp-2">

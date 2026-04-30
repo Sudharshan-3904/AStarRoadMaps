@@ -67,3 +67,15 @@ def list_roadmaps() -> list[dict]:
         except Exception:
             continue
     return sorted(roadmaps, key=lambda x: x["created_at"], reverse=True)
+
+def delete_roadmap(roadmap_id: str):
+    """Deletes all files associated with a roadmap."""
+    files_to_delete = [
+        DATA_DIR / f"{roadmap_id}.json",
+        DATA_DIR / f"{roadmap_id}_progress.json",
+        DATA_DIR / f"{roadmap_id}.md"
+    ]
+    for path in files_to_delete:
+        if path.exists():
+            os.remove(path)
+

@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '../api/client'
 
 export const useRoadmap = (roadmapId) => {
@@ -19,6 +19,19 @@ export const useRoadmapsList = () => {
     queryFn: async () => {
       const response = await api.get('/roadmaps')
       return response.data
+    }
+  })
+}
+
+export const useDeleteRoadmap = () => {
+  const queryClient = useQueryClient()
+  
+  return useMutation({
+    mutationFn: async (roadmapId) => {
+      await api.delete(`/roadmaps/${roadmapId}`)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['roadmaps'] })
     }
   })
 }

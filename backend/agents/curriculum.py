@@ -2,6 +2,7 @@ import json
 import logging
 from pathlib import Path
 from models.spec import UserSpec
+from models.roadmap import Phase
 
 PROMPTS_DIR = Path(__file__).parent.parent / "prompts"
 logger = logging.getLogger(__name__)
@@ -38,7 +39,20 @@ def run_curriculum(client, model_name: str, spec: UserSpec, refinement_feedback:
         content = content.split("```")[0].strip()
         
     try:
-        return json.loads(content)
-    except json.JSONDecodeError:
-        logger.error(f"FAILED to parse JSON. Content snapshot: {content[:200]}...")
+        data = json.loads(content)
+        # Structural validation
+        if "phases" not in data or not isinstance(data["phases"], list):
+            raise ValueError("Missing 'phases' list in curriculum output")
+        
+        # Validate each phase structure
+        for i, phase_data in enumerate(data["phases"]):
+            try:
+                Phase(**phase_data)
+            except Exception as e:
+                logger.error(f"Phase {i} validation failed: {str(e)}")
+                raise ValueError(f"Invalid structure in phase {i}") from e
+                
+        return data
+    except (json.JSONDecodeError, ValueError) as e:
+        logger.error(f"Curriculum validation failed: {str(e)}. Content snapshot: {content[:200]}...")
         raise

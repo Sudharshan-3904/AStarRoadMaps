@@ -9,7 +9,7 @@ from models.roadmap import Roadmap
 from models.spec import UserSpec
 from schemas.requests import GenerateRequest, RefineRequest
 from schemas.responses import GenerateResponse, RoadmapListItem
-from storage.file_store import save_roadmap, load_roadmap, list_roadmaps, DATA_DIR
+from storage.file_store import save_roadmap, load_roadmap, list_roadmaps, DATA_DIR, delete_roadmap
 from orchestrator import run_pipeline, classify_feedback
 
 router = APIRouter()
@@ -92,22 +92,17 @@ async def refine(roadmap_id: str, body: RefineRequest):
         
     feedback_type = classify_feedback(client, model_name, body.feedback)
     
-    # Note: The stream endpoint for refinement will need to handle this.
-    # We can use the same /stream endpoint but it needs to know it's a refinement.
-    # Maybe we should store the refinement request in the roadmap or status.
-    # For now, let's assume the frontend will call /stream/{id} with query param or just /stream/{id} 
-    # and backend checks if status is already complete.
-    # But instruction says: "Return roadmap_id (client re-opens SSE stream)" and 
-    # "feedback_type = classify_feedback(client, body.feedback)".
-    # The orchestrator run_pipeline takes a 'refinement' dict.
-    
-    # We need a way for the subsequent /stream call to know about the refinement.
-    # I'll store the refinement feedback in a companion file or in-memory if it's immediate.
-    # Better: client passes feedback type back to stream?
-    # Instruction for stream says: return EventSourceResponse(run_pipeline({"roadmap_id": roadmap_id, ...}))
-    # This implies stream might take some params.
-    
     return {"roadmap_id": roadmap_id, "feedback_type": feedback_type, "feedback": body.feedback}
+
+@router.delete("/{roadmap_id}")
+async def remove_roadmap(roadmap_id: str):
+    try:
+        # Check if it exists first to return 404 if not
+        load_roadmap(roadmap_id)
+        delete_roadmap(roadmap_id)
+        return {"message": "Roadmap deleted successfully"}
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Roadmap not found")
 
 @router.get("", response_model=list[RoadmapListItem])
 async def list_all_roadmaps():
