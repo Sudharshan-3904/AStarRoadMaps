@@ -1,10 +1,19 @@
 import React from 'react'
 import { Navbar } from './Navbar'
 
+/**
+ * PageShell Component
+ * The main layout wrapper for all pages in the application.
+ * Manages the global theme, background aesthetics (gradients, noise), 
+ * navigation, and shared footer.
+ * 
+ * @param {Object} props
+ * @param {React.ReactNode} props.children - The specific page content to be rendered.
+ */
 export const PageShell = ({ children }) => {
   return (
     <div className="min-h-screen bg-[#020617] text-slate-200 selection:bg-teal-500/30 selection:text-teal-200 overflow-x-hidden">
-      {/* Dynamic Background Elements */}
+      {/* Immersive background layer with pulsing glows and film grain texture */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-teal-500/10 rounded-full blur-[120px] animate-pulse" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-blue-500/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />

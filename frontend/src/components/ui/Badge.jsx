@@ -1,5 +1,13 @@
 import React from 'react'
 
+/**
+ * Badge Component
+ * A compact labeling component for highlighting statuses or categories.
+ * Supports multiple color variants to indicate different states.
+ * 
+ * @param {Object} props
+ * @param {string} props.variant - The color theme: 'blue', 'yellow', 'orange', 'red', 'teal', 'slate'.
+ */
 export const Badge = ({ children, variant = 'slate' }) => {
   const variants = {
     blue: 'bg-blue-500/10 text-blue-400 border-blue-500/20',

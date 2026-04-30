@@ -1,5 +1,12 @@
 import React from 'react'
 
+/**
+ * Spinner Component
+ * A clean, accessible loading indicator using a SVG-based spinning animation.
+ * 
+ * @param {Object} props
+ * @param {string} props.size - Dimension preset: 'sm', 'md', or 'lg'.
+ */
 export const Spinner = ({ size = 'md', className = '' }) => {
   const sizes = {
     sm: 'h-4 w-4 stroke-[3px]',
@@ -8,7 +15,7 @@ export const Spinner = ({ size = 'md', className = '' }) => {
   }
 
   return (
-    <div className={`flex justify-center items-center ${className}`}>
+    <div className={`flex justify-center items-center ${className}`} role="status" aria-label="Loading">
       <svg
         className={`animate-spin text-teal-500 ${sizes[size]}`}
         xmlns="http://www.w3.org/2000/svg"

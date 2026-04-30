@@ -1,6 +1,16 @@
 import React from 'react'
 import { Loader2 } from 'lucide-react'
 
+/**
+ * Button Component
+ * A highly customizable action button with built-in variants, sizes, and 
+ * loading states. Includes micro-interactions like scale-down on click.
+ * 
+ * @param {Object} props
+ * @param {string} props.variant - The visual style: 'primary', 'secondary', 'outline', 'ghost', 'danger'.
+ * @param {string} props.size - The padding/font size: 'sm', 'md', 'lg'.
+ * @param {boolean} props.isLoading - Whether to show a spinner and disable interaction.
+ */
 export const Button = ({
   children,
   variant = 'primary',
@@ -32,9 +42,9 @@ export const Button = ({
       disabled={disabled || isLoading}
       {...props}
     >
-      {isLoading ? (
+      {isLoading && (
         <Loader2 className="w-5 h-5 animate-spin mr-3 text-current" />
-      ) : null}
+      )}
       <span className="relative z-10">{children}</span>
     </button>
   )

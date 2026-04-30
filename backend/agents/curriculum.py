@@ -8,6 +8,24 @@ PROMPTS_DIR = Path(__file__).parent.parent / "prompts"
 logger = logging.getLogger(__name__)
 
 def run_curriculum(client, model_name: str, spec: UserSpec, refinement_feedback: str = None) -> dict:
+    """
+    Generates a structured learning curriculum based on user goals and level.
+    
+    Acts as the primary architect agent, defining the phases, topics, and subtopics.
+    Supports iterative refinement based on user feedback.
+    
+    Args:
+        client: The AI model client.
+        model_name: Name of the model to use.
+        spec: User requirements (goal, skill level, etc.).
+        refinement_feedback: Optional string of user feedback for adjustment.
+        
+    Returns:
+        A dictionary containing the roadmap structure (phases and topics).
+        
+    Raises:
+        ValueError: If the LLM output fails structural validation.
+    """
     logger.info(f"Building curriculum modules for: {spec.goal}")
     prompt_path = PROMPTS_DIR / "curriculum_system.txt"
     with open(prompt_path, "r", encoding="utf-8") as f:
@@ -29,6 +47,7 @@ def run_curriculum(client, model_name: str, spec: UserSpec, refinement_feedback:
     )
     content = response.choices[0].message.content
     
+    # Process model-specific formatting
     if "<think>" in content:
         content = content.split("</think>")[-1].strip()
 
@@ -40,11 +59,12 @@ def run_curriculum(client, model_name: str, spec: UserSpec, refinement_feedback:
         
     try:
         data = json.loads(content)
-        # Structural validation
-        if "phases" not in data or not isinstance(data["phases"], list):
-            raise ValueError("Missing 'phases' list in curriculum output")
         
-        # Validate each phase structure
+        # Enforce structural integrity of the roadmap
+        if "phases" not in data or not isinstance(data["phases"], list):
+            raise ValueError("LLM response missing 'phases' list")
+        
+        # Validate each phase against the official Roadmap schema
         for i, phase_data in enumerate(data["phases"]):
             try:
                 Phase(**phase_data)
@@ -54,5 +74,5 @@ def run_curriculum(client, model_name: str, spec: UserSpec, refinement_feedback:
                 
         return data
     except (json.JSONDecodeError, ValueError) as e:
-        logger.error(f"Curriculum validation failed: {str(e)}. Content snapshot: {content[:200]}...")
+        logger.error(f"Curriculum validation failed: {str(e)}")
         raise

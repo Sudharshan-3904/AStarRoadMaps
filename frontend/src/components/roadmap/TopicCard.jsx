@@ -2,15 +2,21 @@ import React from 'react'
 import { ResourceLink } from './ResourceLink'
 import { CheckCircle2, Clock, Boxes, Lightbulb, Circle } from 'lucide-react'
 
+/**
+ * TopicCard Component
+ * Represents an individual learning unit within a phase.
+ * Features progress tracking, resource listings, and project suggestions.
+ * 
+ * @param {Object} props
+ * @param {Object} props.topic - The topic data object including subtopics and resources.
+ * @param {string} props.status - Current completion status: 'not_started', 'in_progress', or 'done'.
+ * @param {Function} props.onStatusChange - Callback for updating the topic status.
+ */
 export const TopicCard = ({ topic, status = 'not_started', onStatusChange }) => {
-  const getStatusIcon = () => {
-    switch (status) {
-      case 'done': return <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-      case 'in_progress': return <Clock className="w-5 h-5 text-amber-500" />
-      default: return <Circle className="w-5 h-5 text-slate-500" />
-    }
-  }
-
+  
+  /**
+   * Returns the appropriate visual style class based on the topic status.
+   */
   const getStatusColor = () => {
     switch (status) {
       case 'done': return 'border-emerald-500/30 bg-emerald-500/5'
@@ -22,10 +28,14 @@ export const TopicCard = ({ topic, status = 'not_started', onStatusChange }) => 
   return (
     <div className={`p-6 rounded-2xl border transition-all duration-300 ${getStatusColor()}`}>
       <div className="flex items-start justify-between gap-4 mb-4">
-        <div>
+        <div className="flex-1">
           <h4 className="text-lg font-bold text-white mb-2 font-sora flex items-center gap-2">
             {topic.name}
-            {status === 'done' && <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 uppercase tracking-wider">Mastered</span>}
+            {status === 'done' && (
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 uppercase tracking-wider">
+                Mastered
+              </span>
+            )}
           </h4>
           
           {topic.content && (
@@ -34,6 +44,7 @@ export const TopicCard = ({ topic, status = 'not_started', onStatusChange }) => 
             </p>
           )}
 
+          {/* Subtopic Chips */}
           <div className="flex flex-wrap gap-2">
             {topic.subtopics.map((sub, i) => (
               <span key={i} className="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 text-[10px] font-medium border border-slate-700/50">
@@ -43,6 +54,7 @@ export const TopicCard = ({ topic, status = 'not_started', onStatusChange }) => 
           </div>
         </div>
 
+        {/* Status Selector */}
         <select
           value={status}
           onChange={(e) => onStatusChange(e.target.value)}
@@ -54,6 +66,7 @@ export const TopicCard = ({ topic, status = 'not_started', onStatusChange }) => 
         </select>
       </div>
 
+      {/* Resource Section */}
       {topic.resources && topic.resources.length > 0 && (
         <div className="space-y-3 pt-4 border-t border-slate-800/50">
           <div className="flex items-center gap-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">
@@ -67,6 +80,7 @@ export const TopicCard = ({ topic, status = 'not_started', onStatusChange }) => 
         </div>
       )}
 
+      {/* Project Highlight */}
       {topic.project && (
         <div className="mt-4 p-4 rounded-xl bg-teal-500/5 border border-teal-500/20">
           <div className="flex items-center gap-2 text-[10px] font-bold text-teal-400 uppercase tracking-widest mb-1.5">

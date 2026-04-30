@@ -2,7 +2,18 @@ import React from 'react'
 import { Download, Calendar, Target, Clock, Trophy } from 'lucide-react'
 import { Button } from '../ui/Button'
 
+/**
+ * RoadmapHeader Component
+ * Displays the core information and statistics of a roadmap.
+ * Includes the roadmap title, skill level details, and an export option.
+ * 
+ * @param {Object} props
+ * @param {Object} props.roadmap - The complete roadmap object containing title and spec.
+ */
 export const RoadmapHeader = ({ roadmap }) => {
+  /**
+   * Redirects to the backend endpoint to download the roadmap in Markdown format.
+   */
   const downloadMarkdown = () => {
     window.location.href = `/api/roadmaps/${roadmap.id}/markdown`
   }
@@ -25,16 +36,19 @@ export const RoadmapHeader = ({ roadmap }) => {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <StatCard icon={<Target className="w-4 h-4 text-teal-400" />} label="Goal" value={roadmap.spec.goal} />
-        <StatCard icon={<Trophy className="w-4 h-4 text-teal-400" />} label="Level" value={roadmap.spec.skill_level} />
-        <StatCard icon={<Clock className="w-4 h-4 text-teal-400" />} label="Weekly" value={`${roadmap.spec.hours_per_week}h`} />
-        <StatCard icon={<Calendar className="w-4 h-4 text-teal-400" />} label="Duration" value={`${roadmap.spec.estimated_weeks} Weeks`} />
+        <StatItem icon={<Target className="w-4 h-4 text-teal-400" />} label="Goal" value={roadmap.spec.goal} />
+        <StatItem icon={<Trophy className="w-4 h-4 text-teal-400" />} label="Level" value={roadmap.spec.skill_level} />
+        <StatItem icon={<Clock className="w-4 h-4 text-teal-400" />} label="Weekly" value={`${roadmap.spec.hours_per_week}h`} />
+        <StatItem icon={<Calendar className="w-4 h-4 text-teal-400" />} label="Duration" value={`${roadmap.spec.estimated_weeks} Weeks`} />
       </div>
     </div>
   )
 }
 
-const StatCard = ({ icon, label, value }) => (
+/**
+ * Small reusable component for displaying a specific roadmap statistic.
+ */
+const StatItem = ({ icon, label, value }) => (
   <div className="bg-slate-800/40 border border-slate-700/50 rounded-xl p-4 flex items-center space-x-3">
     <div className="bg-slate-900/50 p-2 rounded-lg">
       {icon}

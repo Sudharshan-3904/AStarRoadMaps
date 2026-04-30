@@ -1,7 +1,18 @@
 import React from 'react'
 import { BookOpen, Video, FileText, Wrench, ExternalLink } from 'lucide-react'
 
+/**
+ * ResourceLink Component
+ * Renders a stylized link to a learning resource with an icon corresponding 
+ * to its content type.
+ * 
+ * @param {Object} props
+ * @param {Object} props.resource - The resource object containing label, url, and type.
+ */
 export const ResourceLink = ({ resource }) => {
+  /**
+   * Determines the appropriate icon based on the resource type.
+   */
   const getIcon = () => {
     switch (resource.type) {
       case 'docs': return <BookOpen className="w-4 h-4" />

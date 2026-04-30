@@ -3,18 +3,29 @@ import { ChevronDown, ChevronUp, Clock } from 'lucide-react'
 import { TopicCard } from './TopicCard'
 import { ProgressBar } from './ProgressBar'
 
+/**
+ * PhaseCard Component
+ * Displays a logical grouping of topics (a phase) with an expandable detail view.
+ * Includes visual status indicators, progress tracking, and phase-specific styling.
+ * 
+ * @param {Object} props
+ * @param {Object} props.phase - The phase data object.
+ * @param {Object} props.topicsProgress - Dictionary mapping topic names to their current status.
+ * @param {Function} props.onTopicStatusChange - Callback for updating topic completion state.
+ */
 export const PhaseCard = ({ 
   phase, 
   topicsProgress, 
   onTopicStatusChange 
 }) => {
+  // Default first phase to expanded for better initial UX
   const [isExpanded, setIsExpanded] = useState(phase.phase_number === 1)
   
   const topics = phase.topics
   const doneCount = topics.filter(t => topicsProgress[t.name] === 'done').length
   const progressPercent = (doneCount / topics.length) * 100
 
-  // Border colors by phase as per design guidelines
+  // Dynamic styling based on phase order to create visual hierarchy
   const phaseColors = [
     'border-l-blue-500 shadow-blue-500/5', 
     'border-l-yellow-500 shadow-yellow-500/5', 
@@ -31,17 +42,21 @@ export const PhaseCard = ({
         className="p-6 md:p-8 cursor-pointer flex flex-col md:flex-row md:items-center justify-between gap-6 hover:bg-slate-800/30 transition-colors"
       >
         <div className="flex items-start md:items-center gap-6 flex-1">
+          {/* Phase Number Badge */}
           <div className="bg-slate-950 border border-slate-700/50 w-14 h-14 rounded-2xl flex items-center justify-center text-xl font-bold text-slate-400 shrink-0 group-hover:scale-110 transition-transform">
             {phase.phase_number}
           </div>
+          
           <div className="flex-1 space-y-3">
             <div className="flex flex-wrap items-center gap-3">
               <h3 className="text-2xl font-bold text-white font-sora">{phase.title}</h3>
+              {/* Duration Indicator */}
               <div className="flex items-center gap-1.5 px-3 py-1 bg-slate-950/50 border border-slate-700/30 rounded-full text-[10px] font-bold text-slate-500 uppercase tracking-widest">
                 <Clock className="w-3 h-3" />
                 {phase.week_range}
               </div>
             </div>
+            {/* Phase Progress Bar */}
             <div className="max-w-md">
               <ProgressBar progress={progressPercent} size="sm" showLabel />
             </div>
@@ -61,6 +76,7 @@ export const PhaseCard = ({
         </div>
       </div>
 
+      {/* Expandable Topics List */}
       {isExpanded && (
         <div className="p-6 md:p-8 pt-0 space-y-6 animate-in fade-in slide-in-from-top-4 duration-500">
           <div className="h-px bg-slate-800/80 mb-8" />

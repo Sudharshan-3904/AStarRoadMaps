@@ -1,10 +1,10 @@
 import uuid
 from datetime import datetime
-from fastapi import APIRouter, BackgroundTasks, HTTPException
+from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse
 from sse_starlette.sse import EventSourceResponse
-from clients import get_client_and_model
 
+from clients import get_client_and_model
 from models.roadmap import Roadmap
 from models.spec import UserSpec
 from schemas.requests import GenerateRequest, RefineRequest
@@ -16,10 +16,12 @@ router = APIRouter()
 
 @router.post("/generate")
 async def generate(body: GenerateRequest) -> GenerateResponse:
+    """
+    Initiates the generation of a new roadmap. 
+    Returns a unique roadmap ID that the client can use to stream the actual content.
+    """
     roadmap_id = str(uuid.uuid4())
     
-    # Store initial pending roadmap with the spec
-    # We don't have phases yet
     roadmap = Roadmap(
         id=roadmap_id,
         title=f"Learning {body.goal}",
@@ -27,7 +29,7 @@ async def generate(body: GenerateRequest) -> GenerateResponse:
             goal=body.goal,
             skill_level=body.skill_level,
             hours_per_week=body.hours_per_week,
-            estimated_weeks=0, # To be determined by analyst
+            estimated_weeks=0, 
             provider=body.provider,
             model=body.model
         ),
@@ -41,12 +43,15 @@ async def generate(body: GenerateRequest) -> GenerateResponse:
 
 @router.get("/{roadmap_id}/stream")
 async def stream(roadmap_id: str, feedback: str = None, feedback_type: str = None):
+    """
+    Provides a Server-Sent Events (SSE) stream for real-time roadmap generation updates.
+    Can handle both new generations and refinement requests.
+    """
     try:
         roadmap = load_roadmap(roadmap_id)
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Roadmap not found")
     
-    # Pass the spec to run_pipeline
     request_data = {
         "goal": roadmap.spec.goal,
         "skill_level": roadmap.spec.skill_level,
@@ -67,6 +72,9 @@ async def stream(roadmap_id: str, feedback: str = None, feedback_type: str = Non
 
 @router.get("/{roadmap_id}")
 async def get_roadmap(roadmap_id: str) -> Roadmap:
+    """
+    Retrieves the full structured data for a specific roadmap.
+    """
     try:
         return load_roadmap(roadmap_id)
     except FileNotFoundError:
@@ -74,30 +82,43 @@ async def get_roadmap(roadmap_id: str) -> Roadmap:
 
 @router.get("/{roadmap_id}/markdown")
 async def get_markdown(roadmap_id: str):
+    """
+    Serves the generated roadmap as a downloadable markdown file.
+    """
     path = DATA_DIR / f"{roadmap_id}.md"
     if not path.exists():
-        raise HTTPException(status_code=404, detail="Markdown not found")
+        raise HTTPException(status_code=404, detail="Markdown version not found")
     return FileResponse(path, media_type="text/markdown", filename="roadmap.md")
 
 @router.patch("/{roadmap_id}/refine")
 async def refine(roadmap_id: str, body: RefineRequest):
-    client, model_name = get_client_and_model(
-        provider=roadmap.spec.provider,
-        model=roadmap.spec.model
-    )
+    """
+    Analyzes user feedback for a roadmap and prepares it for a refinement stream.
+    """
     try:
         roadmap = load_roadmap(roadmap_id)
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Roadmap not found")
+
+    client, model_name = get_client_and_model(
+        provider=roadmap.spec.provider,
+        model=roadmap.spec.model
+    )
         
     feedback_type = classify_feedback(client, model_name, body.feedback)
     
-    return {"roadmap_id": roadmap_id, "feedback_type": feedback_type, "feedback": body.feedback}
+    return {
+        "roadmap_id": roadmap_id, 
+        "feedback_type": feedback_type, 
+        "feedback": body.feedback
+    }
 
 @router.delete("/{roadmap_id}")
 async def remove_roadmap(roadmap_id: str):
+    """
+    Permanently deletes a roadmap and all its associated data files.
+    """
     try:
-        # Check if it exists first to return 404 if not
         load_roadmap(roadmap_id)
         delete_roadmap(roadmap_id)
         return {"message": "Roadmap deleted successfully"}
@@ -106,4 +127,7 @@ async def remove_roadmap(roadmap_id: str):
 
 @router.get("", response_model=list[RoadmapListItem])
 async def list_all_roadmaps():
+    """
+    Lists all saved roadmaps for the user's library.
+    """
     return list_roadmaps()

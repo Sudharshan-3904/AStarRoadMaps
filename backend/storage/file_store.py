@@ -4,15 +4,25 @@ from pathlib import Path
 from models.roadmap import Roadmap
 from models.progress import ProgressState
 
+# Define persistent storage location
 DATA_DIR = Path(__file__).parent.parent / "data"
 DATA_DIR.mkdir(exist_ok=True)
 
 def save_roadmap(roadmap: Roadmap):
+    """
+    Serializes and saves a roadmap to a JSON file.
+    """
     path = DATA_DIR / f"{roadmap.id}.json"
     with open(path, "w") as f:
         f.write(roadmap.model_dump_json(indent=2))
 
 def load_roadmap(roadmap_id: str) -> Roadmap:
+    """
+    Loads and deserializes a roadmap from its JSON file.
+    
+    Raises:
+        FileNotFoundError: If the roadmap ID does not correspond to an existing file.
+    """
     path = DATA_DIR / f"{roadmap_id}.json"
     if not path.exists():
         raise FileNotFoundError(f"Roadmap {roadmap_id} not found")
@@ -21,26 +31,36 @@ def load_roadmap(roadmap_id: str) -> Roadmap:
         return Roadmap(**data)
 
 def save_progress(progress: ProgressState):
+    """
+    Saves the user's progress for a specific roadmap.
+    """
     path = DATA_DIR / f"{progress.roadmap_id}_progress.json"
     with open(path, "w") as f:
         f.write(progress.model_dump_json(indent=2))
 
 def load_progress(roadmap_id: str) -> ProgressState:
+    """
+    Retrieves progress data for a roadmap, falling back to a new state if none exists.
+    """
     path = DATA_DIR / f"{roadmap_id}_progress.json"
     if not path.exists():
-        # Fallback to creating a new progress state if not found
-        # This shouldn't usually happen if logic is correct
         return ProgressState(roadmap_id=roadmap_id)
     with open(path, "r") as f:
         data = json.load(f)
         return ProgressState(**data)
 
 def save_markdown(roadmap_id: str, content: str):
+    """
+    Persists the generated markdown version of the roadmap.
+    """
     path = DATA_DIR / f"{roadmap_id}.md"
     with open(path, "w", encoding="utf-8") as f:
         f.write(content)
 
 def load_markdown(roadmap_id: str) -> str:
+    """
+    Reads the markdown file for a roadmap. Returns empty string if not found.
+    """
     path = DATA_DIR / f"{roadmap_id}.md"
     if not path.exists():
         return ""
@@ -48,14 +68,18 @@ def load_markdown(roadmap_id: str) -> str:
         return f.read()
 
 def list_roadmaps() -> list[dict]:
+    """
+    Aggregates metadata for all stored roadmaps for display in the library.
+    """
     roadmaps = []
     for file in DATA_DIR.glob("*.json"):
+        # Skip progress files during listing
         if file.name.endswith("_progress.json"):
             continue
         try:
             with open(file, "r") as f:
                 data = json.load(f)
-                # Count topics
+                # Calculate total topics across all phases
                 topic_count = sum(len(phase['topics']) for phase in data.get('phases', []))
                 roadmaps.append({
                     "id": data.get("id"),
@@ -69,7 +93,9 @@ def list_roadmaps() -> list[dict]:
     return sorted(roadmaps, key=lambda x: x["created_at"], reverse=True)
 
 def delete_roadmap(roadmap_id: str):
-    """Deletes all files associated with a roadmap."""
+    """
+    Permanently deletes all stored data related to a specific roadmap.
+    """
     files_to_delete = [
         DATA_DIR / f"{roadmap_id}.json",
         DATA_DIR / f"{roadmap_id}_progress.json",
@@ -78,4 +104,3 @@ def delete_roadmap(roadmap_id: str):
     for path in files_to_delete:
         if path.exists():
             os.remove(path)
-

@@ -3,7 +3,8 @@ import json
 import uuid
 import logging
 from datetime import datetime
-from typing import Callable, Any
+from typing import Callable, Any, AsyncGenerator
+
 from agents.analyst import run_analyst
 from agents.curriculum import run_curriculum
 from agents.resources import run_resources
@@ -16,7 +17,21 @@ from clients import get_client_and_model
 logger = logging.getLogger(__name__)
 
 async def retry_with_checkpoint(func: Callable, *args, max_retries: int = 2, **kwargs) -> Any:
-    """Helper to retry agent calls if they fail (e.g. validation errors)."""
+    """
+    Executes an agent function with a retry mechanism.
+    
+    Args:
+        func: The agent function (sync or async) to execute.
+        *args: Positional arguments for the function.
+        max_retries: Maximum number of retry attempts.
+        **kwargs: Keyword arguments for the function.
+        
+    Returns:
+        The result of the function call.
+        
+    Raises:
+        Exception: The last encountered exception if all retries fail.
+    """
     last_error = None
     for attempt in range(max_retries + 1):
         try:
@@ -28,14 +43,28 @@ async def retry_with_checkpoint(func: Callable, *args, max_retries: int = 2, **k
             last_error = e
             logger.warning(f"Agent execution attempt {attempt + 1} failed: {str(e)}")
             if attempt < max_retries:
-                await asyncio.sleep(1) # Small delay before retry
+                await asyncio.sleep(1)
     
     logger.error(f"Agent execution failed after {max_retries + 1} attempts.")
     raise last_error
 
 def classify_feedback(client, model_name: str, feedback: str) -> str:
+    """
+    Uses an LLM to categorize user feedback into predefined types.
+    
+    Args:
+        client: The AI model client.
+        model_name: Name of the model to use.
+        feedback: The raw feedback string from the user.
+        
+    Returns:
+        A string category: 'structure', 'resources', or 'format'.
+    """
     logger.info(f"Classifying feedback: {feedback[:50]}...")
-    system_prompt = "Classify the following user feedback for a learning roadmap into one of these three categories: 'structure', 'resources', or 'format'. Respond ONLY with the category name."
+    system_prompt = (
+        "Classify the following user feedback for a learning roadmap into one of these "
+        "three categories: 'structure', 'resources', or 'format'. Respond ONLY with the category name."
+    )
     
     response = client.chat.completions.create(
         model=model_name,
@@ -53,7 +82,20 @@ def classify_feedback(client, model_name: str, feedback: str) -> str:
             return cat
     return "structure"
 
-async def run_pipeline(request_data: dict, refinement: dict = None):
+async def run_pipeline(request_data: dict, refinement: dict = None) -> AsyncGenerator[dict, None]:
+    """
+    Main orchestrator for the roadmap generation pipeline.
+    
+    Handles initial generation, checkpointing, and iterative refinement by coordinating 
+    multiple specialized agents (Analyst, Curriculum, Resources, Formatter).
+    
+    Args:
+        request_data: Configuration for the generation (goal, provider, model, etc.).
+        refinement: Optional dictionary containing refinement feedback and roadmap ID.
+        
+    Yields:
+        Server-Sent Events (SSE) as dictionaries to update the client on progress.
+    """
     roadmap_id = refinement["roadmap_id"] if refinement else str(uuid.uuid4())
     logger.info(f"Starting pipeline for Roadmap ID: {roadmap_id}")
     
@@ -67,7 +109,6 @@ async def run_pipeline(request_data: dict, refinement: dict = None):
         return {"data": json.dumps({"type": event_type, **kwargs})}
 
     try:
-        # --- INITIAL STATE / CHECKPOINT RECOVERY ---
         try:
             roadmap = load_roadmap(roadmap_id)
             spec = roadmap.spec
@@ -78,7 +119,6 @@ async def run_pipeline(request_data: dict, refinement: dict = None):
             spec = None
             roadmap_dict = {}
 
-        # --- ANALYST ---
         if not spec:
             logger.info("Step: Analyst")
             yield emit("agent_start", agent="analyst")
@@ -92,7 +132,6 @@ async def run_pipeline(request_data: dict, refinement: dict = None):
             )
             yield emit("agent_done", agent="analyst")
             
-            # Checkpoint 1
             temp_roadmap = Roadmap(
                 id=roadmap_id,
                 title=f"Learning {spec.goal}",
@@ -104,8 +143,6 @@ async def run_pipeline(request_data: dict, refinement: dict = None):
             save_roadmap(temp_roadmap)
             logger.info("Checkpoint saved: Analyst")
 
-        # --- CURRICULUM ---
-        # Run if new generation OR if refinement is structural OR if existing roadmap has no phases
         if not refinement or refinement["feedback_type"] == "structure" or not roadmap_dict.get("phases"):
             logger.info("Step: Curriculum")
             yield emit("agent_start", agent="curriculum")
@@ -116,7 +153,6 @@ async def run_pipeline(request_data: dict, refinement: dict = None):
             )
             yield emit("agent_done", agent="curriculum")
             
-            # Checkpoint 2
             temp_roadmap = Roadmap(
                 id=roadmap_id,
                 created_at=datetime.utcnow().isoformat(),
@@ -129,8 +165,6 @@ async def run_pipeline(request_data: dict, refinement: dict = None):
         else:
             logger.info("Skipping Curriculum, using checkpoint data.")
 
-        # --- RESOURCES ---
-        # Run if new generation OR if refinement is structural/resources OR if existing topics have no resources
         has_resources = any(t.get("resources") for p in roadmap_dict.get("phases", []) for t in p.get("topics", []))
         if not refinement or refinement["feedback_type"] in ("structure", "resources") or not has_resources:
             logger.info("Step: Resources")
@@ -138,7 +172,6 @@ async def run_pipeline(request_data: dict, refinement: dict = None):
             roadmap_dict = await retry_with_checkpoint(run_resources, client, model_name, roadmap_dict)
             yield emit("agent_done", agent="resources")
             
-            # Checkpoint 3
             temp_roadmap = Roadmap(
                 id=roadmap_id,
                 created_at=datetime.utcnow().isoformat(),
@@ -151,7 +184,6 @@ async def run_pipeline(request_data: dict, refinement: dict = None):
         else:
              logger.info("Skipping Resources, using checkpoint data.")
 
-        # --- FORMATTER ---
         logger.info("Step: Formatter")
         yield emit("agent_start", agent="formatter")
         
@@ -179,7 +211,6 @@ async def run_pipeline(request_data: dict, refinement: dict = None):
         markdown = await retry_with_checkpoint(run_formatter, client, model_name, roadmap, progress)
         yield emit("agent_done", agent="formatter")
 
-        # --- FINAL SAVE ---
         roadmap.status = "complete"
         save_roadmap(roadmap)
         save_progress(progress)

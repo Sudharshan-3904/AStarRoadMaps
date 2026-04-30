@@ -6,18 +6,28 @@ import { useRoadmapStream } from '../hooks/useRoadmapStream'
 import { useRoadmapStore } from '../store/useRoadmapStore'
 import { AlertCircle } from 'lucide-react'
 
+/**
+ * Generate Page
+ * Displays the real-time progress of the multi-agent generation pipeline.
+ * Monitors agent statuses and automatically redirects to the final roadmap
+ * once the "Formatter" agent completes its work.
+ */
 export const Generate = () => {
   const { roadmapId } = useParams()
   const navigate = useNavigate()
+  
+  // Connect to the Server-Sent Events stream for generation updates
   const { error } = useRoadmapStream(roadmapId || null)
+  
+  // Access global state for agent statuses (Analyst, Curriculum, etc.)
   const agentStatuses = useRoadmapStore((state) => state.agentStatuses)
 
-  // Navigate when formatter is done
+  // Trigger redirection upon pipeline completion
   useEffect(() => {
     if (agentStatuses.formatter === 'done') {
       const timer = setTimeout(() => {
         navigate(`/roadmap/${roadmapId}`)
-      }, 1500) // Small delay to show completion checkmark
+      }, 1500) // Brief delay to allow the user to see the "Done" state
       return () => clearTimeout(timer)
     }
   }, [agentStatuses.formatter, navigate, roadmapId])

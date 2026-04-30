@@ -2,6 +2,15 @@ import React, { useState } from 'react'
 import { Sparkles } from 'lucide-react'
 import { Button } from '../ui/Button'
 
+/**
+ * RefinePanel Component
+ * Provides a text interface for users to submit natural language feedback
+ * to adjust the current roadmap's structure or content.
+ * 
+ * @param {Object} props
+ * @param {Function} props.onSubmit - Callback function triggered on form submission.
+ * @param {boolean} props.isLoading - State indicating if a refinement request is in progress.
+ */
 export const RefinePanel = ({ onSubmit, isLoading }) => {
   const [feedback, setFeedback] = useState('')
 

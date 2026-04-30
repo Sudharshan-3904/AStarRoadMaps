@@ -2,6 +2,10 @@ import React from 'react'
 import { CheckCircle2, Circle, Loader2, XCircle } from 'lucide-react'
 import { useRoadmapStore } from '../../store/useRoadmapStore'
 
+/**
+ * Definition of the multi-agent pipeline sequence.
+ * Each entry includes identification and user-facing copy.
+ */
 const agentsOrder = [
   { id: 'analyst', label: 'Analyst Agent', description: 'Personalizing your learning path...' },
   { id: 'curriculum', label: 'Curriculum Agent', description: 'Designing study modules...' },
@@ -9,6 +13,12 @@ const agentsOrder = [
   { id: 'formatter', label: 'Formatter Agent', description: 'Preparing your interactive view...' }
 ]
 
+/**
+ * AgentProgress Component
+ * Visualizes the real-time status of the AI generation pipeline.
+ * Uses a vertical timeline motif with dynamic icons and connector lines 
+ * to indicate progress through various processing stages.
+ */
 export const AgentProgress = () => {
   const agentStatuses = useRoadmapStore((state) => state.agentStatuses)
 
@@ -23,7 +33,7 @@ export const AgentProgress = () => {
 
           return (
             <div key={agent.id} className="relative flex items-start group">
-              {/* Connector Line */}
+              {/* Vertical Connector Line */}
               {index < agentsOrder.length - 1 && (
                 <div 
                   className={`absolute left-4 top-10 w-0.5 h-12 transition-colors duration-500 ${
@@ -32,7 +42,7 @@ export const AgentProgress = () => {
                 />
               )}
 
-              {/* Icon */}
+              {/* Status Icon Indicator */}
               <div className="relative z-10 flex items-center justify-center">
                 {isDone ? (
                   <div className="bg-teal-500 rounded-full p-1 animate-in fade-in zoom-in duration-500">
@@ -50,7 +60,7 @@ export const AgentProgress = () => {
                 )}
               </div>
 
-              {/* Text */}
+              {/* Status Copy and Labels */}
               <div className="ml-6">
                 <h3 className={`font-semibold text-lg transition-colors ${
                   isActive ? 'text-teal-400 font-sora' : isDone ? 'text-slate-200' : 'text-slate-500'
@@ -60,7 +70,7 @@ export const AgentProgress = () => {
                 <p className={`text-sm transition-colors ${
                   isActive ? 'text-slate-300' : 'text-slate-600'
                 }`}>
-                  {status === 'pending' ? 'Waiting...' : agent.description}
+                  {status === 'pending' ? 'Waiting in queue...' : agent.description}
                 </p>
               </div>
             </div>

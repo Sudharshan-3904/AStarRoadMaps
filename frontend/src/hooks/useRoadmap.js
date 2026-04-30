@@ -1,6 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '../api/client'
 
+/**
+ * Fetches detailed data for a specific roadmap.
+ */
 export const useRoadmap = (roadmapId) => {
   return useQuery({
     queryKey: ['roadmap', roadmapId],
@@ -13,6 +16,9 @@ export const useRoadmap = (roadmapId) => {
   })
 }
 
+/**
+ * Fetches a summary list of all roadmaps for the library view.
+ */
 export const useRoadmapsList = () => {
   return useQuery({
     queryKey: ['roadmaps'],
@@ -23,6 +29,9 @@ export const useRoadmapsList = () => {
   })
 }
 
+/**
+ * Mutation hook to delete a roadmap and refresh the library list.
+ */
 export const useDeleteRoadmap = () => {
   const queryClient = useQueryClient()
   
@@ -31,6 +40,7 @@ export const useDeleteRoadmap = () => {
       await api.delete(`/roadmaps/${roadmapId}`)
     },
     onSuccess: () => {
+      // Refresh the library list after successful deletion
       queryClient.invalidateQueries({ queryKey: ['roadmaps'] })
     }
   })

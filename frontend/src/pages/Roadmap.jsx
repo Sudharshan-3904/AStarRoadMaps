@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { PageShell } from '../components/layout/PageShell'
 import { RoadmapHeader } from '../components/roadmap/RoadmapHeader'
@@ -12,14 +12,20 @@ import { useRefine } from '../hooks/useRefine'
 import { useRoadmapStream } from '../hooks/useRoadmapStream'
 import { Spinner } from '../components/ui/Spinner'
 
+/**
+ * Roadmap Detail Page
+ * The core view where users interact with their learning path, track progress, 
+ * and request refinements based on feedback.
+ */
 export const Roadmap = () => {
   const { roadmapId } = useParams()
   
+  // Data synchronization hooks
   const { data: roadmap, isLoading: roadmapLoading } = useRoadmap(roadmapId || null)
   const { data: progress, updateProgress } = useProgress(roadmapId || null)
   const { mutate: refine, isPending: refinementSending } = useRefine(roadmapId || null)
 
-  // Feedback state for SSE stream if refining
+  // Internal state for managing the refinement stream lifecycle
   const [activeFeedback, setActiveFeedback] = useState(undefined)
   const [activeFeedbackType, setActiveFeedbackType] = useState(undefined)
   
@@ -29,6 +35,9 @@ export const Roadmap = () => {
     activeFeedbackType
   )
 
+  /**
+   * Submits refinement feedback to the backend and triggers the SSE stream.
+   */
   const handleRefine = (feedback) => {
     refine({ feedback }, {
       onSuccess: (data) => {
@@ -38,8 +47,8 @@ export const Roadmap = () => {
     })
   }
 
-  // Clear streaming state once done
-  React.useEffect(() => {
+  // Effect to reset refinement state once the stream is disconnected
+  useEffect(() => {
     if (!isStreaming && activeFeedback) {
       setActiveFeedback(undefined)
       setActiveFeedbackType(undefined)
@@ -57,14 +66,14 @@ export const Roadmap = () => {
     )
   }
 
-  // Calculate overall progress
+  // Aggregated progress metrics
   const totalTopics = roadmap.phases.flatMap(p => p.topics).length
   const doneTopics = progress ? Object.values(progress.topics).filter(s => s === 'done').length : 0
   const totalProgress = totalTopics > 0 ? (doneTopics / totalTopics) * 100 : 0
 
   return (
     <PageShell>
-      {/* Refinement Overlay */}
+      {/* Real-time refinement overlay - visible during AI regeneration */}
       {isStreaming && (
         <div className="fixed inset-0 z-[60] bg-slate-950/90 backdrop-blur-xl flex items-center justify-center p-6 animate-in fade-in duration-300">
           <div className="w-full max-w-xl">
@@ -82,6 +91,7 @@ export const Roadmap = () => {
       <RoadmapHeader roadmap={roadmap} />
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
+        {/* Main Content: The Learning Tree */}
         <div className="lg:col-span-3 space-y-8">
           <div className="bg-slate-900/40 border border-slate-800/60 rounded-2xl p-6 lg:p-8">
             <div className="flex items-center justify-between mb-8">
@@ -109,6 +119,7 @@ export const Roadmap = () => {
           </div>
         </div>
 
+        {/* Sidebar: Refinement Tools and Tips */}
         <div className="space-y-8">
           <div className="sticky top-24">
             <RefinePanel onSubmit={handleRefine} isLoading={refinementSending} />

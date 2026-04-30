@@ -5,10 +5,20 @@ import { GoalForm } from '../components/generator/GoalForm'
 import { useGenerateRoadmap } from '../hooks/useGenerateRoadmap'
 import { Sparkles, Brain, Shield, Zap } from 'lucide-react'
 
+/**
+ * Home Page
+ * The landing page and primary entry point for roadmap generation.
+ * Features a high-impact hero section, the goal-setting form, and 
+ * key value-proposition highlights.
+ */
 export const Home = () => {
   const navigate = useNavigate()
   const { mutate: generate, isPending } = useGenerateRoadmap()
 
+  /**
+   * Handles the primary roadmap generation request.
+   * Redirects the user to the real-time generation tracking page.
+   */
   const handleSubmit = (data) => {
     generate(data, {
       onSuccess: ({ roadmap_id }) => {
@@ -19,7 +29,7 @@ export const Home = () => {
 
   return (
     <PageShell>
-      {/* Hero Section */}
+      {/* Hero Section: High-level messaging and brand identity */}
       <section className="text-center mb-20">
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-800/50 border border-slate-700/50 text-teal-400 text-xs font-bold uppercase tracking-widest mb-8 animate-in fade-in slide-in-from-top-4 duration-1000">
           <Sparkles className="w-4 h-4" />
@@ -40,7 +50,7 @@ export const Home = () => {
         </p>
       </section>
 
-      {/* Main Input Section */}
+      {/* Generation Section: The core interaction area */}
       <section className="max-w-3xl mx-auto mb-32 relative">
         <div className="absolute -inset-1 bg-gradient-to-r from-teal-500 to-blue-500 rounded-3xl blur opacity-20" />
         <div className="relative bg-slate-900/80 backdrop-blur-xl border border-slate-700/50 rounded-3xl p-8 md:p-12 shadow-2xl">
@@ -48,7 +58,7 @@ export const Home = () => {
         </div>
       </section>
 
-      {/* Features Grid */}
+      {/* Value Propositions: Highlighting key features */}
       <section className="grid grid-cols-1 md:grid-cols-3 gap-8">
         <FeatureCard
           icon={<Brain className="w-8 h-8 text-teal-400" />}
@@ -70,6 +80,9 @@ export const Home = () => {
   );
 }
 
+/**
+ * Reusable card for highlighting platform features with icons and descriptions.
+ */
 const FeatureCard = ({ icon, title, description }) => (
   <div className="p-8 bg-slate-900/40 border border-slate-800/50 rounded-2xl hover:bg-slate-800/40 transition-all duration-300 hover:scale-[1.02] group">
     <div className="mb-6 p-4 bg-slate-950 rounded-2xl w-fit group-hover:rotate-6 transition-transform">

@@ -1,5 +1,10 @@
 import React from 'react'
 
+/**
+ * Card Component
+ * A foundational layout component for grouping content with a premium 
+ * dark-themed glassmorphism effect.
+ */
 export const Card = ({ children, className = '', onClick }) => {
   return (
     <div
